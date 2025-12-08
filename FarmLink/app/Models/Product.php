@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -11,16 +11,23 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'product_name',
         'name',
         'description',
         'price',
+        'unit_measure',
         'unit',
+        'product_category',
         'category',
         'farm_name',
         'image_path',
+        'image_url',
+        'avail_qty',
         'stock_quantity',
         'is_active',
-        'is_organic'
+        'is_organic',
+        'accID',
+        'status'
     ];
 
     protected $casts = [
@@ -44,5 +51,13 @@ class Product extends Model
     public function scopeInStock($query)
     {
         return $query->where('stock_quantity', '>', 0);
+    }
+
+    /**
+     * Get the seller (user) that owns the product
+     */
+    public function seller()
+    {
+        return $this->belongsTo(User::class, 'accID');
     }
 }

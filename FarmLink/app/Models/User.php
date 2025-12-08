@@ -13,7 +13,6 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens;
-
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use HasProfilePhoto;
@@ -73,5 +72,13 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->is_admin;
+    }
+
+    /**
+     * Get the products (produce) for the seller
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'accID');
     }
 }
