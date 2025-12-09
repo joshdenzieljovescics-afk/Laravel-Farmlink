@@ -169,9 +169,9 @@
                     
                     <div class="text-center bg-white rounded-lg shadow-lg p-6">
                         <img src="https://lh3.googleusercontent.com/a-/ALV-UjXA1eRkvTj_g5j8_d7TbmX9Y1Yr7YDBUT98NClLgrJyDfqbOPM=s265-p-k-rw-no" 
-                             alt="Adrian Dale G. Relevo" 
+                             alt="Paul Andrew Chua" 
                              class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
-                        <h3 class="text-xl font-semibold text-farm-green mb-2">Adrian Dale G. Relevo</h3>
+                        <h3 class="text-xl font-semibold text-farm-green mb-2">Paul Andrew Chua</h3>
                         <p class="text-farm-orange mb-2">Technology Director</p>
                         <p class="text-gray-600 text-sm">
                             Develops and maintains our platform to provide the best user experience

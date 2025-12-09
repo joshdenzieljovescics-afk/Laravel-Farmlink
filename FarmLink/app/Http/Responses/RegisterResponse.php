@@ -2,8 +2,8 @@
 
 namespace App\Http\Responses;
 
-use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Illuminate\Http\JsonResponse;
+use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 
 class RegisterResponse implements RegisterResponseContract
 {
@@ -15,9 +15,22 @@ class RegisterResponse implements RegisterResponseContract
      */
     public function toResponse($request)
     {
-        // After registration, redirect to home page
+        $user = auth()->user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Redirect based on user type after registration
+        if ($user->user_type === 'seller') {
+            return $request->wantsJson()
+                ? new JsonResponse([], 201)
+                : redirect()->route('seller.dashboard')->with('success', 'Welcome to FarmLink! Start adding your products.');
+        }
+
+        // Buyer - redirect to dashboard
         return $request->wantsJson()
             ? new JsonResponse([], 201)
-            : redirect()->route('home');
+            : redirect()->route('dashboard')->with('success', 'Welcome to FarmLink! Start exploring fresh produce.');
     }
 }

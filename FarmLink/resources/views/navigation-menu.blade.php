@@ -15,9 +15,11 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link href="{{ route('seller.dashboard') }}" :active="request()->routeIs('seller.*')">
-                        {{ __('My Products') }}
-                    </x-nav-link>
+                    @if(Auth::user() && Auth::user()->user_type === 'seller')
+                        <x-nav-link href="{{ route('seller.dashboard') }}" :active="request()->routeIs('seller.*')">
+                            {{ __('My Products') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

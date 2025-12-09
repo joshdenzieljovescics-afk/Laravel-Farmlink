@@ -29,6 +29,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'user_type',
     ];
 
     /**
@@ -72,6 +73,22 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->is_admin;
+    }
+
+    /**
+     * Check if user is a seller (farmer)
+     */
+    public function isSeller(): bool
+    {
+        return $this->user_type === 'seller';
+    }
+
+    /**
+     * Check if user is a buyer
+     */
+    public function isBuyer(): bool
+    {
+        return $this->user_type === 'buyer';
     }
 
     /**

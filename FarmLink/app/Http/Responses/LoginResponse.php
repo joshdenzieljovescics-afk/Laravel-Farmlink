@@ -15,15 +15,29 @@ class LoginResponse implements LoginResponseContract
      */
     public function toResponse($request)
     {
-        // Check if user is admin, redirect to admin dashboard, otherwise redirect to home
-        if (auth()->user() && auth()->user()->is_admin) {
+        $user = auth()->user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Check if user is admin, redirect to admin dashboard
+        if ($user->is_admin) {
             return $request->wantsJson()
                 ? new JsonResponse([], 200)
                 : redirect()->intended(route('admin.dashboard'));
         }
 
+        // Check if user is a seller (farmer), redirect to seller dashboard
+        if ($user->user_type === 'seller') {
+            return $request->wantsJson()
+                ? new JsonResponse([], 200)
+                : redirect()->intended(route('seller.dashboard'));
+        }
+
+        // Otherwise, buyer - redirect to home/dashboard
         return $request->wantsJson()
             ? new JsonResponse([], 200)
-            : redirect()->intended(route('home'));
+            : redirect()->intended(route('dashboard'));
     }
 }
