@@ -22,6 +22,13 @@
 
                 <!-- User Authentication -->
                 @auth
+                    <!-- FarmTokens Display -->
+                    <a href="{{ route('topup') }}" class="flex items-center space-x-2 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-lg transition duration-300 border border-green-200">
+                        <span class="text-xl">🪙</span>
+                        <span class="font-semibold text-green-600">{{ number_format(Auth::user()->farm_tokens ?? 0) }}</span>
+                        <span class="text-sm text-gray-600">FT</span>
+                    </a>
+
                     <!-- User is logged in -->
                     <div class="relative">
                         <button onclick="toggleProfileDropdown()" class="flex items-center space-x-2 text-gray-600 hover:text-green-600 transition duration-300">
@@ -75,6 +82,17 @@
         <!-- Mobile Navigation -->
         <div id="mobile-menu" class="md:hidden hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 border-t">
+                @auth
+                    <!-- Mobile FarmTokens Display -->
+                    <a href="{{ route('topup') }}" class="flex items-center justify-between bg-green-50 hover:bg-green-100 px-3 py-2 rounded-lg mb-2">
+                        <span class="flex items-center space-x-2">
+                            <span class="text-xl">🪙</span>
+                            <span class="text-gray-600">FarmTokens</span>
+                        </span>
+                        <span class="font-bold text-green-600">{{ number_format(Auth::user()->farm_tokens ?? 0) }} FT</span>
+                    </a>
+                @endauth
+                
                 <a href="#products" class="block px-3 py-2 text-gray-600 hover:text-green-600">Products</a>
                 <a href="#about" class="block px-3 py-2 text-gray-600 hover:text-green-600">About</a>
                 <a href="#contact" class="block px-3 py-2 text-gray-600 hover:text-green-600">Contact</a>

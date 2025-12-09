@@ -86,7 +86,7 @@
                                 <div class="h-48 bg-gray-200 overflow-hidden">
                                     @if($product->image_path && is_array($product->image_path) && count($product->image_path) > 0)
                                         <img src="{{ asset('storage/products/thumbnails/' . $product->image_path[0]) }}" 
-                                             alt="{{ $product->name }}" 
+                                             alt="{{ $product->product_name }}" 
                                              class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center bg-gray-100">
