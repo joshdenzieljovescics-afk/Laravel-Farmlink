@@ -28,7 +28,7 @@
                 <span id="cart-total" class="text-xl font-bold text-green-600">₱0.00</span>
             </div>
             <div class="space-y-2">
-                <button onclick="checkout()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition duration-300">
+                <button onclick="goToCheckout()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition duration-300">
                     Checkout
                 </button>
                 <button onclick="clearCart()" class="w-full border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition duration-300">
@@ -193,16 +193,21 @@ window.clearCart = function() {
     }
 }
 
-// Checkout function
-window.checkout = function() {
+// Go to checkout page
+window.goToCheckout = function() {
     if (window.cart.length === 0) {
         showToast('Your cart is empty', 'error');
         return;
     }
     
-    // For now, just show a message
-    const total = window.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    showToast(`Checkout functionality coming soon! Total: ₱${total.toFixed(2)}`, 'info');
+    // Close cart and navigate to checkout
+    toggleCart();
+    window.location.href = '{{ route("checkout") }}';
+}
+
+// Checkout function (legacy - kept for compatibility)
+window.checkout = function() {
+    goToCheckout();
 }
 
 // Show toast notification function (if not defined elsewhere)

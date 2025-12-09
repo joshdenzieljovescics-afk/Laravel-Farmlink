@@ -123,8 +123,8 @@
                                 <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
                                     @if($product->image_path && is_array($product->image_path) && count($product->image_path) > 0)
                                         <img src="{{ asset('storage/products/thumbnails/' . $product->image_path[0]) }}" 
-                                             alt="{{ $product->name }}" 
-                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                             alt="{{ $product->product_name }}" 
+                                             class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center">
                                             <svg class="h-16 w-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

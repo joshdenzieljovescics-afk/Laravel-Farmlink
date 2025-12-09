@@ -53,6 +53,13 @@
 
                 <!-- User Authentication -->
                 @auth
+                    <!-- FarmTokens Display -->
+                    <a href="{{ route('topup') }}" class="flex items-center space-x-2 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-lg transition duration-300 border border-green-200">
+                        <span class="text-xl">🪙</span>
+                        <span class="font-semibold text-green-600">{{ number_format(Auth::user()->farm_tokens ?? 0) }}</span>
+                        <span class="text-sm text-gray-600">FT</span>
+                    </a>
+
                     <!-- User is logged in -->
                     <div class="relative">
                         <button onclick="toggleProfileDropdown()" class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all">
@@ -144,12 +151,29 @@
         </div>
 
         <!-- Mobile Navigation -->
-        <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
+        <!-- <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
             <div class="px-4 py-3 space-y-2">
                 <a href="/products" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">Products</a>
                 <a href="/about" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">About</a>
                 <a href="/contact" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">Contact</a>
-                <a href="/developers" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">Developers</a>
+                <a href="/developers" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">Developers</a> -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 border-t">
+                @auth
+                    <!-- Mobile FarmTokens Display -->
+                    <a href="{{ route('topup') }}" class="flex items-center justify-between bg-green-50 hover:bg-green-100 px-3 py-2 rounded-lg mb-2">
+                        <span class="flex items-center space-x-2">
+                            <span class="text-xl">🪙</span>
+                            <span class="text-gray-600">FarmTokens</span>
+                        </span>
+                        <span class="font-bold text-green-600">{{ number_format(Auth::user()->farm_tokens ?? 0) }} FT</span>
+                    </a>
+                @endauth
+                
+                <a href="#products" class="block px-3 py-2 text-gray-600 hover:text-green-600">Products</a>
+                <a href="#about" class="block px-3 py-2 text-gray-600 hover:text-green-600">About</a>
+                <a href="#contact" class="block px-3 py-2 text-gray-600 hover:text-green-600">Contact</a>
+                <a href="/developers" class="block px-3 py-2 text-gray-600 hover:text-green-600">Developers</a>
                 @guest
                     <div class="pt-3 space-y-2">
                         <a href="{{ route('login') }}" class="block px-4 py-2.5 text-center text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium border border-gray-200 transition-all">
