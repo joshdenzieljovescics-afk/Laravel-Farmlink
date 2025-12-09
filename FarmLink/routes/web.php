@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Buyer\BuyerController;
 use App\Http\Controllers\Seller\SellerController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,14 +24,13 @@ Route::get('/developers', function () {
     return view('developers');
 })->name('developers');
 
+// Buyer dashboard - for regular users
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [BuyerController::class, 'dashboard'])->name('dashboard');
 });
 
 // Admin routes

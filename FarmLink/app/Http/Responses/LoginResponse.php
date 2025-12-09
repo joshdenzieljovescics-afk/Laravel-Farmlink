@@ -2,8 +2,8 @@
 
 namespace App\Http\Responses;
 
-use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use Illuminate\Http\JsonResponse;
+use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 
 class LoginResponse implements LoginResponseContract
 {
@@ -35,9 +35,9 @@ class LoginResponse implements LoginResponseContract
                 : redirect()->intended(route('seller.dashboard'));
         }
 
-        // Otherwise, buyer - redirect to home/dashboard
+        // Otherwise, buyer - redirect to home page
         return $request->wantsJson()
             ? new JsonResponse([], 200)
-            : redirect()->intended(route('dashboard'));
+            : redirect()->intended(route('home'));
     }
 }

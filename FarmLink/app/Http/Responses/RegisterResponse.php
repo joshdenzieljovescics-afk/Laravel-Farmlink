@@ -28,9 +28,9 @@ class RegisterResponse implements RegisterResponseContract
                 : redirect()->route('seller.dashboard')->with('success', 'Welcome to FarmLink! Start adding your products.');
         }
 
-        // Buyer - redirect to dashboard
+        // Buyer - redirect to home page
         return $request->wantsJson()
             ? new JsonResponse([], 201)
-            : redirect()->route('dashboard')->with('success', 'Welcome to FarmLink! Start exploring fresh produce.');
+            : redirect()->route('home')->with('success', 'Welcome to FarmLink! Start exploring fresh produce.');
     }
 }

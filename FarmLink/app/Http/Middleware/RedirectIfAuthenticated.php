@@ -3,10 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Providers\RouteServiceProvider;
-use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Closure;
 
 class RedirectIfAuthenticated
 {
@@ -21,11 +21,24 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                $user = Auth::user();
+
                 // If user is admin, redirect to admin dashboard
-                if (Auth::user()->is_admin) {
+                if ($user->is_admin) {
                     return redirect()->route('admin.dashboard');
                 }
-                // Otherwise redirect to home
+
+                // If user is a seller (farmer), redirect to seller dashboard
+                if ($user->user_type === 'seller') {
+                    return redirect()->route('seller.dashboard');
+                }
+
+                // If user is a buyer, redirect to home page
+                if ($user->user_type === 'buyer') {
+                    return redirect()->route('home');
+                }
+
+                // Default fallback to home
                 return redirect(RouteServiceProvider::HOME);
             }
         }
