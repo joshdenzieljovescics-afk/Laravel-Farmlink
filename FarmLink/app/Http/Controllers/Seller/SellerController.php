@@ -47,6 +47,19 @@ class SellerController extends Controller
         // Handle multiple image uploads
         $imagePaths = [];
         if ($request->hasFile('images')) {
+            // Ensure directories exist
+            $productsPath = storage_path('app/public/products');
+            $thumbnailsPath = storage_path('app/public/products/thumbnails');
+
+            if (!file_exists($productsPath)) {
+                mkdir($productsPath, 0777, true);
+                chmod($productsPath, 0777);
+            }
+            if (!file_exists($thumbnailsPath)) {
+                mkdir($thumbnailsPath, 0777, true);
+                chmod($thumbnailsPath, 0777);
+            }
+
             $manager = new ImageManager(new Driver());
 
             foreach ($request->file('images') as $image) {
@@ -71,11 +84,15 @@ class SellerController extends Controller
         // Create product with seller's ID
         Product::create([
             'product_name' => $validated['product_name'],
+            'name' => $validated['product_name'],  // Also populate old column
             'description' => $validated['description'] ?? null,
             'price' => $validated['price'],
             'unit_measure' => $validated['unit_measure'],
+            'unit' => $validated['unit_measure'],  // Also populate old column
             'product_category' => $validated['product_category'],
+            'category' => $validated['product_category'],  // Also populate old column
             'avail_qty' => $validated['avail_qty'],
+            'stock_quantity' => $validated['avail_qty'],  // Also populate old column
             'farm_name' => $validated['farm_name'] ?? null,
             'image_path' => $imagePaths,
             'is_organic' => $validated['is_organic'] ?? false,
@@ -123,6 +140,19 @@ class SellerController extends Controller
 
         // Handle new image uploads
         if ($request->hasFile('images')) {
+            // Ensure directories exist
+            $productsPath = storage_path('app/public/products');
+            $thumbnailsPath = storage_path('app/public/products/thumbnails');
+
+            if (!file_exists($productsPath)) {
+                mkdir($productsPath, 0777, true);
+                chmod($productsPath, 0777);
+            }
+            if (!file_exists($thumbnailsPath)) {
+                mkdir($thumbnailsPath, 0777, true);
+                chmod($thumbnailsPath, 0777);
+            }
+
             $manager = new ImageManager(new Driver());
 
             foreach ($request->file('images') as $image) {
@@ -145,11 +175,15 @@ class SellerController extends Controller
         // Update product
         $product->update([
             'product_name' => $validated['product_name'],
+            'name' => $validated['product_name'],  // Also populate old column
             'description' => $validated['description'] ?? null,
             'price' => $validated['price'],
             'unit_measure' => $validated['unit_measure'],
+            'unit' => $validated['unit_measure'],  // Also populate old column
             'product_category' => $validated['product_category'],
+            'category' => $validated['product_category'],  // Also populate old column
             'avail_qty' => $validated['avail_qty'],
+            'stock_quantity' => $validated['avail_qty'],  // Also populate old column
             'farm_name' => $validated['farm_name'] ?? null,
             'image_path' => $imagePaths,
             'is_organic' => $validated['is_organic'] ?? false,
