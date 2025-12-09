@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +15,20 @@
                         'farm-cream': '#f5f5dc',
                         'farm-brown': '#8b4513',
                         'farm-orange': '#ff6b35'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.6s ease-out',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
                     }
                 }
             }
@@ -28,86 +42,194 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
     </style>
 </head>
-<body class="bg-farm-cream min-h-screen">
+<body class="bg-gradient-to-b from-white to-gray-50 min-h-screen">
     <!-- Include Navigation -->
     @include('components.navigation-bar')
     
     <!-- Main Content -->
     <main class="pt-20">
         <!-- Hero Section -->
-        <section class="bg-gradient-to-r from-farm-green to-green-600 text-white py-16">
-            <div class="container mx-auto px-4 text-center">
-                <h1 class="text-5xl font-bold mb-4">Welcome to FarmLink</h1>
-                <p class="text-xl mb-8">Connect directly with local farmers for the freshest produce. Farm to table, simplified.</p>
-                <div class="space-x-4">
-                    <a href="{{ route('products') }}" class="bg-white text-farm-green px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 inline-block">
-                        Shop Now
-                    </a>
-                    <a href="#about" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-farm-green transition duration-300 inline-block">
-                        Learn More
-                    </a>
+        <section class="relative bg-gradient-to-br from-green-600 via-green-500 to-emerald-600 text-white py-24 md:py-32 overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"1\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+            </div>
+            
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="max-w-4xl mx-auto text-center animate-fade-in-up">
+                    <div class="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+                        <span class="text-sm font-semibold">🌾 Farm Fresh, Delivered to You</span>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                        Welcome to <span class="text-yellow-300">FarmLink</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl mb-10 text-green-50 leading-relaxed max-w-3xl mx-auto">
+                        Connect directly with local farmers for the freshest organic produce. From farm to table, simplified and sustainable.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <a href="{{ route('products') }}" class="group bg-white text-green-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-yellow-300 hover:text-green-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 inline-flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                            </svg>
+                            Shop Now
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
+                        </a>
+                        <a href="#about" class="group border-2 border-white/30 backdrop-blur-sm bg-white/10 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-green-600 transition-all duration-300 inline-flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Learn More
+                        </a>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-yellow-300 mb-2">500+</div>
+                            <div class="text-sm text-green-100">Local Farmers</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-yellow-300 mb-2">10k+</div>
+                            <div class="text-sm text-green-100">Happy Customers</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-yellow-300 mb-2">100%</div>
+                            <div class="text-sm text-green-100">Organic Products</div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            
+            <!-- Wave Shape -->
+            <div class="absolute bottom-0 left-0 right-0">
+                <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                    <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+                </svg>
             </div>
         </section>
 
     <!-- Image Slider Section -->
-    <section class="py-16 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-12 text-farm-green">Fresh from the Farm</h2>
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Fresh from the Farm</span>
+                </h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Discover our handpicked selection of farm-fresh produce, delivered straight to your doorstep
+                </p>
+            </div>
             @include('components.image-slider')
         </div>
     </section>
 
     <!-- Featured Products Section -->
-    <section id="products" class="py-16">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-12 text-farm-green">Featured Products</h2>
+    <section id="products" class="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <div class="inline-block bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                    ⭐ Featured Collection
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Trending Products</span>
+                </h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Explore our most popular fresh produce, sourced from local sustainable farms
+                </p>
+            </div>
             
             @if($featuredProducts->count() > 0)
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach($featuredProducts as $product)
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
+                        <div class="group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 transform hover:-translate-y-2">
                             <!-- Product Image -->
-                            <div class="h-48 bg-gray-200 relative overflow-hidden">
+                            <div class="relative h-56 overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50">
                                 @if($product->image_path && is_array($product->image_path) && count($product->image_path) > 0)
                                     <img src="{{ asset('storage/' . $product->image_path[0]) }}" 
                                          alt="{{ $product->name }}" 
-                                         class="w-full h-full object-cover">
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 @else
-                                    <div class="w-full h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-                                        <svg class="w-20 h-20 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    <div class="w-full h-full bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center">
+                                        <svg class="w-24 h-24 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
                                     </div>
                                 @endif
                                 
                                 <!-- Organic Badge -->
                                 @if($product->is_organic)
-                                    <span class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
-                                        ORGANIC
-                                    </span>
+                                    <div class="absolute top-3 right-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center space-x-1">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                        <span>ORGANIC</span>
+                                    </div>
                                 @endif
+                                
+                                <!-- Quick View Overlay -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
                             
                             <!-- Product Info -->
-                            <div class="p-6">
-                                <h3 class="text-xl font-semibold mb-2 line-clamp-1">{{ $product->name }}</h3>
-                                <p class="text-gray-600 text-sm mb-2 line-clamp-2">{{ Str::limit($product->description, 60) }}</p>
-                                <p class="text-xs text-gray-500 mb-3">
-                                    <span class="font-medium">From:</span> {{ $product->farm_name ?? $product->seller->name ?? 'Local Farm' }}
-                                </p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-2xl font-bold text-farm-green">₱{{ number_format($product->price, 2) }}/{{ $product->unit }}</span>
+                            <div class="p-5">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h3 class="text-lg font-bold text-gray-800 line-clamp-1 flex-1">{{ $product->name }}</h3>
+                                    <div class="flex items-center space-x-1 text-yellow-400">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                        <span class="text-xs text-gray-600 font-medium">4.8</span>
+                                    </div>
+                                </div>
+                                
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2 leading-relaxed">{{ Str::limit($product->description, 70) }}</p>
+                                
+                                <div class="flex items-center text-xs text-gray-500 mb-4">
+                                    <svg class="w-4 h-4 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    <span class="font-medium">{{ $product->farm_name ?? $product->seller->name ?? 'Local Farm' }}</span>
+                                </div>
+                                
+                                <div class="flex items-end justify-between pt-3 border-t border-gray-100">
+                                    <div>
+                                        <div class="text-2xl font-bold text-green-600">₱{{ number_format($product->price, 2) }}</div>
+                                        <div class="text-xs text-gray-500">per {{ $product->unit }}</div>
+                                    </div>
                                     <button onclick="addToCart('{{ $product->id }}', '{{ $product->name }}', {{ $product->price }})" 
-                                            class="bg-farm-green text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300 text-sm">
-                                        Add to Cart
+                                            class="group/btn bg-gradient-to-r from-green-600 to-emerald-600 text-white px-5 py-2.5 rounded-xl hover:shadow-lg transition-all duration-300 text-sm font-semibold flex items-center space-x-2 hover:scale-105">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                        </svg>
+                                        <span>Add</span>
                                     </button>
                                 </div>
-                                <p class="text-xs text-gray-500 mt-2">
-                                    <span class="font-medium">Stock:</span> {{ $product->stock_quantity }} {{ $product->unit }}{{ $product->stock_quantity > 1 ? 's' : '' }} available
-                                </p>
+                                
+                                <div class="mt-3 flex items-center justify-between text-xs">
+                                    <span class="text-gray-500">
+                                        <span class="font-semibold text-green-600">{{ $product->stock_quantity }}</span> {{ $product->unit }}{{ $product->stock_quantity > 1 ? 's' : '' }} left
+                                    </span>
+                                    @if($product->stock_quantity < 10)
+                                        <span class="bg-red-100 text-red-600 px-2 py-1 rounded-full font-medium">Low Stock!</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -256,21 +378,28 @@
         // Initialize CSRF token for JavaScript
         window.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         
-        // Initialize cart from session storage
-        let cart = JSON.parse(sessionStorage.getItem('farmlink_cart')) || {};
+        // Use the same cart format as cart.blade.php
+        if (typeof window.cart === 'undefined') {
+            window.cart = JSON.parse(sessionStorage.getItem('farmLinkCart')) || [];
+        }
         
         // Save cart to session storage
         function saveCart() {
-            sessionStorage.setItem('farmlink_cart', JSON.stringify(cart));
+            sessionStorage.setItem('farmLinkCart', JSON.stringify(window.cart));
             updateCartDisplay();
+            // Update cart count if function exists
+            if (typeof window.updateCartCount === 'function') {
+                window.updateCartCount();
+            }
         }
         
         // Add item to cart
         function addToCart(id, name, price) {
-            if (cart[id]) {
-                cart[id].quantity += 1;
+            const existingItem = window.cart.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.quantity += 1;
             } else {
-                cart[id] = { name: name, price: price, quantity: 1 };
+                window.cart.push({ id: id, name: name, price: price, quantity: 1 });
             }
             saveCart();
             showToast(`${name} added to cart!`, 'success');
@@ -282,27 +411,27 @@
             const cartItems = document.getElementById('cart-items');
             const cartTotal = document.getElementById('cart-total');
             
-            const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
-            const totalPrice = Object.values(cart).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const totalItems = window.cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = window.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             
             if (cartCount) cartCount.textContent = totalItems;
-            if (cartTotal) cartTotal.textContent = `$${totalPrice.toFixed(2)}`;
+            if (cartTotal) cartTotal.textContent = `₱${totalPrice.toFixed(2)}`;
             
             if (cartItems) {
                 cartItems.innerHTML = '';
-                Object.entries(cart).forEach(([id, item]) => {
+                window.cart.forEach((item) => {
                     const cartItem = document.createElement('div');
                     cartItem.className = 'flex justify-between items-center p-3 border-b';
                     cartItem.innerHTML = `
                         <div>
                             <h4 class="font-semibold">${item.name}</h4>
-                            <p class="text-sm text-gray-600">$${item.price} x ${item.quantity}</p>
+                            <p class="text-sm text-gray-600">₱${item.price} x ${item.quantity}</p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <button onclick="decreaseQuantity('${id}')" class="px-2 py-1 bg-gray-200 rounded">-</button>
+                            <button onclick="decreaseQuantity('${item.id}')" class="px-2 py-1 bg-gray-200 rounded">-</button>
                             <span>${item.quantity}</span>
-                            <button onclick="addToCart('${id}', '${item.name}', ${item.price})" class="px-2 py-1 bg-gray-200 rounded">+</button>
-                            <button onclick="removeFromCart('${id}')" class="text-red-500 ml-2">×</button>
+                            <button onclick="addToCart('${item.id}', '${item.name}', ${item.price})" class="px-2 py-1 bg-gray-200 rounded">+</button>
+                            <button onclick="removeFromCart('${item.id}')" class="text-red-500 ml-2">×</button>
                         </div>
                     `;
                     cartItems.appendChild(cartItem);
@@ -312,23 +441,24 @@
         
         // Remove item from cart
         function removeFromCart(id) {
-            delete cart[id];
+            window.cart = window.cart.filter(item => item.id !== id);
             saveCart();
         }
         
         // Decrease quantity
         function decreaseQuantity(id) {
-            if (cart[id] && cart[id].quantity > 1) {
-                cart[id].quantity -= 1;
+            const item = window.cart.find(item => item.id === id);
+            if (item && item.quantity > 1) {
+                item.quantity -= 1;
             } else {
-                delete cart[id];
+                removeFromCart(id);
             }
             saveCart();
         }
         
         // Clear cart
         function clearCart() {
-            cart = {};
+            window.cart = [];
             saveCart();
         }
         

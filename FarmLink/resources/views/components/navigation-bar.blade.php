@@ -1,51 +1,116 @@
-<nav class="bg-white shadow-lg relative z-50">
-    <div class="container mx-auto px-4">
-        <div class="flex justify-between items-center py-4">
+<nav class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
             <!-- Logo -->
             <div class="flex items-center space-x-2">
                 <span class="text-2xl">🌱</span>
-                <a href="/" class="text-2xl font-bold text-green-600">FarmLink</a>
+                <a href="/" class="text-xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent">FarmLink</a>
             </div>
 
             <!-- Desktop Navigation -->
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="/products" class="text-gray-600 hover:text-green-600 transition duration-300">Products</a>
-                <a href="/about" class="text-gray-600 hover:text-green-600 transition duration-300">About</a>
-                <a href="/contact" class="text-gray-600 hover:text-green-600 transition duration-300">Contact</a>
-                <a href="/developers" class="text-gray-600 hover:text-green-600 transition duration-300">Developers</a>
-                
+            <div class="hidden md:flex items-center space-x-1">
+                <a href="/" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Home
+                </a>
+                <a href="/products" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    Products
+                </a>
+                <a href="/about" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    About
+                </a>
+                <a href="/contact" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    Contact
+                </a>
+                <a href="/developers" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                    </svg>
+                    Developers
+                </a>
+            </div>
+
+            <!-- Right Side Actions -->
+            <div class="hidden md:flex items-center space-x-3">
                 <!-- Cart -->
-                <button onclick="toggleCart()" class="relative p-2 text-gray-600 hover:text-green-600 transition duration-300">
-                    <span class="text-2xl">🛒</span>
-                    <span id="cart-count" class="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                <button onclick="toggleCart()" class="relative p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg" style="display: none;">0</span>
                 </button>
 
                 <!-- User Authentication -->
                 @auth
                     <!-- User is logged in -->
                     <div class="relative">
-                        <button onclick="toggleProfileDropdown()" class="flex items-center space-x-2 text-gray-600 hover:text-green-600 transition duration-300">
-                            <span class="text-xl">👤</span>
-                            <span>{{ Auth::user()->name }}</span>
-                            <span class="text-sm">▼</span>
+                        <button onclick="toggleProfileDropdown()" class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white font-bold">
+                                {{ substr(Auth::user()->name, 0, 1) }}
+                            </div>
+                            <span class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
                         
                         <!-- Profile Dropdown -->
-                        <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                        <div id="profile-dropdown" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 hidden z-50">
                             <div class="py-2">
-                                <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Dashboard</a>
+                                <div class="px-4 py-2 border-b border-gray-100">
+                                    <p class="text-xs text-gray-400 font-semibold uppercase">Manage Account</p>
+                                </div>
+                                <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                    </svg>
+                                    Dashboard
+                                </a>
                                 @if(Auth::user()->isAdmin())
-                                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-green-600 hover:bg-gray-100">Admin Dashboard</a>
-                                    <a href="{{ route('admin.products.index') }}" class="block px-4 py-2 text-green-600 hover:bg-gray-100">Manage Products</a>
-                                    <a href="{{ route('admin.users') }}" class="block px-4 py-2 text-green-600 hover:bg-gray-100">Manage Users</a>
+                                    <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-2 text-green-600 hover:bg-green-50 transition-colors">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                        </svg>
+                                        Admin Dashboard
+                                    </a>
+                                    <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-2 text-green-600 hover:bg-green-50 transition-colors">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                        </svg>
+                                        Manage Products
+                                    </a>
+                                    <a href="{{ route('admin.users') }}" class="flex items-center px-4 py-2 text-green-600 hover:bg-green-50 transition-colors">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                        </svg>
+                                        Manage Users
+                                    </a>
                                 @endif
-                                <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
-                                <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Orders</a>
-                                <div class="border-t my-1"></div>
+                                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    Profile
+                                </a>
+                                <div class="border-t border-gray-100 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
-                                        Logout
+                                    <button type="submit" class="flex items-center w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition-colors">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                        </svg>
+                                        Log Out
                                     </button>
                                 </form>
                             </div>
@@ -53,39 +118,47 @@
                     </div>
                 @else
                     <!-- User is not logged in -->
-                    <div class="flex items-center space-x-4">
-                        <a href="{{ route('login') }}" class="text-gray-600 hover:text-green-600 transition duration-300">
-                            Login
-                        </a>
-                        <a href="{{ route('register') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300">
-                            Sign Up
-                        </a>
-                    </div>
+                    <a href="{{ route('login') }}" class="px-6 py-2 text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
+                        Login
+                    </a>
+                    <a href="{{ route('register') }}" class="px-6 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white text-sm font-semibold rounded-lg hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg">
+                        Get Started
+                    </a>
                 @endauth
             </div>
 
             <!-- Mobile menu button -->
-            <div class="md:hidden">
-                <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-green-600 focus:outline-none">
-                    <span class="text-2xl">☰</span>
+            <div class="md:hidden flex items-center space-x-3">
+                <button onclick="toggleCart()" class="relative p-2">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <span id="cart-count-mobile" class="absolute -top-1 -right-1 bg-green-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button onclick="toggleMobileMenu()" class="text-gray-700 hover:text-green-600 focus:outline-none p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
                 </button>
             </div>
         </div>
 
         <!-- Mobile Navigation -->
-        <div id="mobile-menu" class="md:hidden hidden">
-            <div class="px-2 pt-2 pb-3 space-y-1 border-t">
-                <a href="#products" class="block px-3 py-2 text-gray-600 hover:text-green-600">Products</a>
-                <a href="#about" class="block px-3 py-2 text-gray-600 hover:text-green-600">About</a>
-                <a href="#contact" class="block px-3 py-2 text-gray-600 hover:text-green-600">Contact</a>
-                <a href="/developers" class="block px-3 py-2 text-gray-600 hover:text-green-600">Developers</a>
+        <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
+            <div class="px-4 py-3 space-y-2">
+                <a href="/products" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">Products</a>
+                <a href="/about" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">About</a>
+                <a href="/contact" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">Contact</a>
+                <a href="/developers" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">Developers</a>
                 @guest
-                    <a href="{{ route('login') }}" class="block px-3 py-2 text-gray-600 hover:text-green-600">
-                        Login
-                    </a>
-                    <a href="{{ route('register') }}" class="block w-full text-left px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 mt-2">
-                        Sign Up
-                    </a>
+                    <div class="pt-3 space-y-2">
+                        <a href="{{ route('login') }}" class="block px-4 py-2.5 text-center text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium border border-gray-200 transition-all">
+                            Login
+                        </a>
+                        <a href="{{ route('register') }}" class="block px-4 py-2.5 text-center bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg font-semibold hover:shadow-lg transition-all">
+                            Sign Up
+                        </a>
+                    </div>
                 @endguest
             </div>
         </div>
@@ -93,9 +166,27 @@
 </nav>
 
 <script>
+// Update cart count badge
+window.updateCartCount = function() {
+    const cartCountElement = document.getElementById('cart-count');
+    const cartCountMobile = document.getElementById('cart-count-mobile');
+    const cart = JSON.parse(sessionStorage.getItem('farmLinkCart')) || [];
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+    }
+    if (cartCountMobile) {
+        cartCountMobile.textContent = totalItems;
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     const profileDropdown = document.getElementById('profile-dropdown');
     const mobileMenu = document.getElementById('mobile-menu');
+
+    // Initialize cart count
+    updateCartCount();
 
     // Toggle mobile menu
     window.toggleMobileMenu = function() {

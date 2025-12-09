@@ -75,65 +75,52 @@
         <section class="py-16">
             <div class="container mx-auto px-4">
                 @if($products->count() > 0)
-                    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         @foreach($products as $product)
-                            <div class="product-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow h-full flex flex-col" data-category="{{ strtolower($product->category) }}">
+                            <div class="product-card bg-white border border-gray-200 rounded-lg p-4" data-category="{{ strtolower($product->category) }}">
                                 @if($product->image_url)
                                     <img src="{{ $product->image_url }}" 
                                          alt="{{ $product->name }}" 
-                                         class="w-full h-48 object-cover flex-shrink-0"
-                                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNTAgMTIwSDI1MFYxODBIMTUwVjEyMFoiIGZpbGw9IiNEMUQ1REIiLz4KPGV0ZXh0IHg9IjIwMCIgeT0iMjEwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM2QjczODAiPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4K'; this.classList.add('bg-gray-200', 'flex', 'items-center', 'justify-center'); this.classList.remove('object-cover');"
+                                         class="w-full h-48 object-cover rounded-md mb-4"
+                                         onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNTAgMTIwSDI1MFYxODBIMTUwVjEyMFoiIGZpbGw9IiNEMUQ1REIiLz4KPGV0ZXh0IHg9IjIwMCIgeT0iMjEwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM2QjczODAiPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4K'; this.classList.add('bg-gray-200'); this.classList.remove('object-cover');"
                                          loading="lazy">
                                 @else
-                                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center flex-shrink-0">
-                                        <span class="text-gray-500">No Image</span>
+                                    <div class="w-full h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center">
+                                        <span class="text-gray-500 text-sm">No Image</span>
                                     </div>
                                 @endif
-                                <div class="p-6 flex flex-col flex-grow">
-                                    <div class="flex items-start justify-between mb-2">
-                                        <h3 class="text-xl font-semibold text-farm-green flex-1 mr-2">{{ $product->name }}</h3>
+                                
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-1">{{ $product->name }}</h3>
+                                    <p class="text-sm text-gray-500 mb-2">{{ $product->category }}</p>
+                                    
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xl font-bold text-green-600">₱{{ number_format($product->price, 2) }}</span>
                                         @if($product->is_organic)
-                                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full flex-shrink-0">Organic</span>
+                                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded inline-block">Organic</span>
                                         @endif
                                     </div>
                                     
-                                    <!-- Description with fixed height -->
-                                    <div class="h-12 mb-3">
-                                        <p class="text-gray-600 text-sm line-clamp-2">{{ Str::limit($product->description, 80) }}</p>
-                                    </div>
-                                    
-                                    <!-- Farm name with fixed height -->
-                                    <div class="h-6 mb-4">
-                                        @if($product->farm_name)
-                                            <p class="text-sm text-farm-green font-medium">From {{ $product->farm_name }}</p>
+                                    <p class="text-sm text-gray-600 mb-3">
+                                        Stock: 
+                                        @if($product->stock_quantity > 0)
+                                            <span class="text-green-600 font-medium">{{ $product->stock_quantity }} {{ $product->unit }}(s)</span>
+                                        @else
+                                            <span class="text-red-600 font-medium">Out of Stock</span>
                                         @endif
-                                    </div>
+                                    </p>
                                     
-                                    <!-- Spacer to push content to bottom -->
-                                    <div class="flex-grow"></div>
-                                    
-                                    <!-- Stock warning -->
-                                    @if($product->stock_quantity > 0 && $product->stock_quantity <= 10)
-                                        <p class="text-orange-600 text-xs mb-3">Only {{ $product->stock_quantity }} left!</p>
+                                    @if($product->stock_quantity > 0)
+                                        <button onclick="addToCart('{{ $product->id }}', {{ json_encode($product->name) }}, {{ $product->price }})" 
+                                                class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-colors text-sm font-medium">
+                                            Add to Cart
+                                        </button>
+                                    @else
+                                        <button disabled 
+                                                class="w-full bg-gray-300 text-gray-500 py-2 rounded-md text-sm font-medium cursor-not-allowed">
+                                            Out of Stock
+                                        </button>
                                     @endif
-                                    
-                                    <!-- Price and button section - always at bottom -->
-                                    <div class="flex justify-between items-center mt-auto">
-                                        <div class="flex-1">
-                                            <span class="text-2xl font-bold text-farm-orange">₱{{ number_format($product->price, 2) }}</span>
-                                            <span class="text-sm text-gray-500">/{{ $product->unit }}</span>
-                                        </div>
-                                        <div class="flex-shrink-0">
-                                            @if($product->stock_quantity > 0)
-                                                <button onclick="addToCart('{{ $product->id }}', {{ json_encode($product->name) }}, {{ $product->price }})" 
-                                                        class="bg-farm-green text-white px-4 py-2 rounded hover:bg-green-700 transition-colors whitespace-nowrap">
-                                                    Add to Cart
-                                                </button>
-                                            @else
-                                                <span class="bg-gray-100 text-gray-500 px-4 py-2 rounded whitespace-nowrap">Out of Stock</span>
-                                            @endif
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         @endforeach
