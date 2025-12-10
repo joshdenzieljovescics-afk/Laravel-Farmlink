@@ -6,7 +6,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Checkout - FarmLink</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWBjk56uFxZLBLL4UE2prGQp7aOBKu37k&libraries=places&loading=async&callback=initMap" async defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -20,7 +19,125 @@
                 }
             }
         }
+        
+        // Define variables globally
+        let map;
+        let marker;
+        let selectedLocation = null;
+        let selectedAddress = '';
+        
+        // Define initMap globally for Google Maps callback
+        window.initMap = function() {
+            console.log('initMap called');
+            
+            // Wait for DOM to be ready if it's not yet
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    initializeMap();
+                });
+            } else {
+                initializeMap();
+            }
+        }
+        
+        function initializeMap() {
+            console.log('Initializing map...');
+            
+            // Default location (Manila, Philippines)
+            const defaultLocation = { lat: 14.5995, lng: 120.9842 };
+            
+            const mapElement = document.getElementById('map');
+            if (!mapElement) {
+                console.error('Map element not found, retrying in 100ms...');
+                setTimeout(initializeMap, 100);
+                return;
+            }
+            
+            map = new google.maps.Map(mapElement, {
+                center: defaultLocation,
+                zoom: 13,
+                mapTypeControl: false,
+                streetViewControl: false,
+            });
+
+            // Create draggable marker
+            marker = new google.maps.Marker({
+                position: defaultLocation,
+                map: map,
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+            });
+
+            // Update address when marker is dragged
+            google.maps.event.addListener(marker, 'dragend', function() {
+                const position = marker.getPosition();
+                selectedLocation = {
+                    lat: position.lat(),
+                    lng: position.lng()
+                };
+                reverseGeocode(position);
+            });
+
+            // Initialize autocomplete
+            const input = document.getElementById('address-input');
+            if (input) {
+                const autocomplete = new google.maps.places.Autocomplete(input, {
+                    componentRestrictions: { country: 'ph' }
+                });
+
+                autocomplete.addListener('place_changed', function() {
+                    const place = autocomplete.getPlace();
+                    if (place.geometry) {
+                        map.setCenter(place.geometry.location);
+                        map.setZoom(15);
+                        marker.setPosition(place.geometry.location);
+                        selectedLocation = {
+                            lat: place.geometry.location.lat(),
+                            lng: place.geometry.location.lng()
+                        };
+                        selectedAddress = place.formatted_address;
+                        updateAddressDisplay();
+                    }
+                });
+            }
+
+            // Allow clicking on map to set location
+            map.addListener('click', function(event) {
+                marker.setPosition(event.latLng);
+                selectedLocation = {
+                    lat: event.latLng.lat(),
+                    lng: event.latLng.lng()
+                };
+                reverseGeocode(event.latLng);
+            });
+            
+            console.log('Map initialized successfully');
+        }
+
+        function reverseGeocode(location) {
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ location: location }, function(results, status) {
+                if (status === 'OK' && results[0]) {
+                    selectedAddress = results[0].formatted_address;
+                    updateAddressDisplay();
+                }
+            });
+        }
+
+        function updateAddressDisplay() {
+            const addressElement = document.getElementById('selected-address');
+            const coordsElement = document.getElementById('coordinates');
+            
+            if (addressElement) {
+                addressElement.textContent = selectedAddress || 'Please select your delivery location';
+            }
+            if (coordsElement && selectedLocation) {
+                coordsElement.textContent = 
+                    `Coordinates: ${selectedLocation.lat.toFixed(6)}, ${selectedLocation.lng.toFixed(6)}`;
+            }
+        }
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWBjk56uFxZLBLL4UE2prGQp7aOBKu37k&libraries=places&callback=initMap" async defer></script>
 </head>
 <body class="bg-farm-cream min-h-screen">
     @include('components.navigation-bar')
@@ -201,95 +318,52 @@
     </div>
 
     <script>
-        let map;
-        let marker;
-        let selectedLocation = null;
-        let selectedAddress = '';
-        let cart = JSON.parse(sessionStorage.getItem('farmLinkCart')) || [];
+        let cart = [];
         const DELIVERY_FEE = 50;
         const userBalance = {{ auth()->user()->farm_tokens ?? 0 }};
 
-        // Initialize Google Map
-        function initMap() {
-            // Default location (Manila, Philippines)
-            const defaultLocation = { lat: 14.5995, lng: 120.9842 };
-            
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: defaultLocation,
-                zoom: 13,
-                mapTypeControl: false,
-                streetViewControl: false,
-            });
-
-            // Create draggable marker
-            marker = new google.maps.Marker({
-                position: defaultLocation,
-                map: map,
-                draggable: true,
-                title: 'Delivery Location'
-            });
-
-            // Update address when marker is dragged
-            marker.addListener('dragend', function() {
-                updateAddress(marker.getPosition());
-            });
-
-            // Add click listener to map
-            map.addListener('click', function(event) {
-                marker.setPosition(event.latLng);
-                updateAddress(event.latLng);
-            });
-
-            // Setup autocomplete
-            const input = document.getElementById('address-input');
-            const autocomplete = new google.maps.places.Autocomplete(input);
-            autocomplete.bindTo('bounds', map);
-
-            autocomplete.addListener('place_changed', function() {
-                const place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    return;
+        // Load cart immediately
+        function loadCart() {
+            try {
+                const cartData = sessionStorage.getItem('farmLinkCart');
+                console.log('Raw cart data:', cartData);
+                cart = cartData ? JSON.parse(cartData) : [];
+                console.log('Parsed cart:', cart);
+                
+                // Ensure cart is an array
+                if (!Array.isArray(cart)) {
+                    console.error('Cart is not an array, resetting to empty array');
+                    cart = [];
                 }
-
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(17);
-                }
-
-                marker.setPosition(place.geometry.location);
-                updateAddress(place.geometry.location);
-            });
+            } catch (error) {
+                console.error('Error loading cart:', error);
+                cart = [];
+            }
         }
 
-        // Update address from coordinates
-        function updateAddress(location) {
-            selectedLocation = {
-                lat: location.lat(),
-                lng: location.lng()
-            };
-
-            const geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ location: location }, function(results, status) {
-                if (status === 'OK' && results[0]) {
-                    selectedAddress = results[0].formatted_address;
-                    document.getElementById('selected-address').textContent = selectedAddress;
-                    document.getElementById('coordinates').textContent = 
-                        `Lat: ${selectedLocation.lat.toFixed(6)}, Lng: ${selectedLocation.lng.toFixed(6)}`;
-                }
-            });
-        }
+        // Call loadCart immediately
+        loadCart();
 
         // Load checkout items
         function loadCheckoutItems() {
+            console.log('Loading checkout items, cart length:', cart.length);
+            console.log('Cart contents:', cart);
+            
             const container = document.getElementById('checkout-items');
+            
+            if (!container) {
+                console.error('Checkout items container not found');
+                return;
+            }
             
             if (cart.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-8 text-gray-500">
                         <span class="text-4xl mb-2 block">🛒</span>
                         <p>Your cart is empty</p>
+                        <a href="{{ route('products') }}" class="inline-block mt-4 text-green-600 hover:text-green-700 font-medium">
+                            Browse Products
+                        </a>
                     </div>
                 `;
                 return;
@@ -299,10 +373,10 @@
                 <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-green-300 transition-colors">
                     <div class="flex-1">
                         <h4 class="font-semibold text-gray-800">${item.name}</h4>
-                        <p class="text-sm text-gray-600">₱${item.price.toFixed(2)} × ${item.quantity}</p>
+                        <p class="text-sm text-gray-600">₱${parseFloat(item.price).toFixed(2)} × ${item.quantity}</p>
                     </div>
                     <div class="text-right">
-                        <p class="font-bold text-green-600">₱${(item.price * item.quantity).toFixed(2)}</p>
+                        <p class="font-bold text-green-600">₱${(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2)}</p>
                     </div>
                 </div>
             `).join('');
@@ -423,8 +497,13 @@
 
         // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
-            initMap();
+            console.log('DOM Content Loaded');
+            // Reload cart to ensure we have latest data
+            loadCart();
             loadCheckoutItems();
+            
+            // Google Maps will be initialized via callback automatically
+            console.log('Waiting for Google Maps callback...');
         });
     </script>
 </body>

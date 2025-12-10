@@ -73,8 +73,20 @@ class CheckoutController extends Controller
                 'updated_at' => now()
             ]);
 
-            // Create order items
+            // Create order items and update stock
             foreach ($request->input('items') as $item) {
+                // Check if product has enough stock
+                $product = DB::table('products')->where('id', $item['id'])->first();
+                
+                if (!$product) {
+                    throw new \Exception("Product not found: {$item['name']}");
+                }
+                
+                if ($product->stock_quantity < $item['quantity']) {
+                    throw new \Exception("Insufficient stock for {$item['name']}. Only {$product->stock_quantity} available.");
+                }
+                
+                // Create order item
                 DB::table('order_items')->insert([
                     'order_id' => $order,
                     'product_id' => $item['id'],
@@ -86,10 +98,10 @@ class CheckoutController extends Controller
                     'updated_at' => now()
                 ]);
 
-                // Optional: Update product stock
-                // DB::table('products')
-                //     ->where('id', $item['id'])
-                //     ->decrement('stock_quantity', $item['quantity']);
+                // Update product stock
+                DB::table('products')
+                    ->where('id', $item['id'])
+                    ->decrement('stock_quantity', $item['quantity']);
             }
 
             // Optional: Create transaction record

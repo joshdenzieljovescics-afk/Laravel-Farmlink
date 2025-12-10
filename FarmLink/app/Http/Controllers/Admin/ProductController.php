@@ -43,18 +43,29 @@ class ProductController extends Controller
         if ($request->hasFile('images')) {
             $manager = new ImageManager(new Driver());
             
+            // Create directories if they don't exist
+            if (!Storage::disk('public')->exists('products')) {
+                Storage::disk('public')->makeDirectory('products');
+            }
+            if (!Storage::disk('public')->exists('products/thumbnails')) {
+                Storage::disk('public')->makeDirectory('products/thumbnails');
+            }
+            
             foreach ($request->file('images') as $image) {
-                $filename = time() . '_' . uniqid() . '_' . $image->getClientOriginalName();
+                $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                 
-                // Process image with Intervention/Image v3
+                // Process and save main image
                 $img = $manager->read($image->getRealPath());
-                $img->scale(width: 800, height: 600);
-                $img->greyscale();
-                
-                // Save to storage/app/public/products
+                $img->scale(width: 800);
                 $img->save(storage_path('app/public/products/' . $filename));
                 
-                $imagePaths[] = 'products/' . $filename;
+                // Create and save thumbnail
+                $thumbnail = $manager->read($image->getRealPath());
+                $thumbnail->cover(400, 300);
+                $thumbnail->save(storage_path('app/public/products/thumbnails/' . $filename));
+                
+                // Store only the filename in the array
+                $imagePaths[] = $filename;
             }
             
             $validated['image_path'] = $imagePaths;
@@ -98,19 +109,29 @@ class ProductController extends Controller
         if ($request->hasFile('images')) {
             $manager = new ImageManager(new Driver());
             
+            // Create directories if they don't exist
+            if (!Storage::disk('public')->exists('products')) {
+                Storage::disk('public')->makeDirectory('products');
+            }
+            if (!Storage::disk('public')->exists('products/thumbnails')) {
+                Storage::disk('public')->makeDirectory('products/thumbnails');
+            }
+            
             foreach ($request->file('images') as $image) {
-                $filename = time() . '_' . uniqid() . '_' . $image->getClientOriginalName();
+                $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                 
-                // Process image with Intervention/Image v3
+                // Process and save main image
                 $img = $manager->read($image->getRealPath());
-                $img->scale(width: 800, height: 600);
-                $img->greyscale();
-
-                
-                // Save to storage/app/public/products
+                $img->scale(width: 800);
                 $img->save(storage_path('app/public/products/' . $filename));
                 
-                $existingImages[] = 'products/' . $filename;
+                // Create and save thumbnail
+                $thumbnail = $manager->read($image->getRealPath());
+                $thumbnail->cover(400, 300);
+                $thumbnail->save(storage_path('app/public/products/thumbnails/' . $filename));
+                
+                // Store only the filename in the array
+                $existingImages[] = $filename;
             }
             
             $validated['image_path'] = $existingImages;
@@ -128,9 +149,15 @@ class ProductController extends Controller
         $images = is_array($product->image_path) ? $product->image_path : [];
         
         if (isset($images[$index])) {
-            // Delete physical file
-            if (Storage::disk('public')->exists($images[$index])) {
-                Storage::disk('public')->delete($images[$index]);
+            // Delete physical files (both main image and thumbnail)
+            $filename = $images[$index];
+            
+            if (Storage::disk('public')->exists('products/' . $filename)) {
+                Storage::disk('public')->delete('products/' . $filename);
+            }
+            
+            if (Storage::disk('public')->exists('products/thumbnails/' . $filename)) {
+                Storage::disk('public')->delete('products/thumbnails/' . $filename);
             }
             
             // Remove from array

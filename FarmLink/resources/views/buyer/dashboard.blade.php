@@ -1,4 +1,27 @@
-<x-app-layout>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Dashboard - FarmLink</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'farm-green': '#2d5016',
+                        'farm-cream': '#f5f5dc',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-green-50 via-white to-blue-50 min-h-screen">
+    @include('navigation-menu')
+
     <div class="pt-20 pb-12 bg-gradient-to-br from-green-50 via-white to-blue-50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Welcome Section with Gradient -->
@@ -170,4 +193,7 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+
+    @include('components.cart')
+</body>
+</html>

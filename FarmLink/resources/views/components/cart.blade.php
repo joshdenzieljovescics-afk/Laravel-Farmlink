@@ -42,6 +42,85 @@
 <!-- Cart Overlay -->
 <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40" onclick="toggleCart()"></div>
 
+<!-- Quantity Selector Modal -->
+<div id="quantity-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[60] flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full transform transition-all">
+        <div class="p-6">
+            <!-- Icon -->
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+            </div>
+            
+            <!-- Title -->
+            <h3 id="quantity-modal-title" class="text-xl font-bold text-gray-900 text-center mb-2">Add to Cart</h3>
+            
+            <!-- Product Name -->
+            <p id="quantity-modal-product" class="text-gray-600 text-center mb-6 font-medium"></p>
+            
+            <!-- Quantity Selector -->
+            <div class="flex items-center justify-center space-x-4 mb-6">
+                <button onclick="decreaseModalQuantity()" class="w-12 h-12 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded-full transition-all duration-200 text-xl font-bold">
+                    −
+                </button>
+                <input type="number" id="modal-quantity" value="1" min="1" max="999" oninput="updateQuantityFromInput()" class="w-20 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg py-2 focus:outline-none focus:border-green-500">
+                <button onclick="increaseModalQuantity()" class="w-12 h-12 flex items-center justify-center bg-gray-200 hover:bg-gray-300 rounded-full transition-all duration-200 text-xl font-bold">
+                    +
+                </button>
+            </div>
+            
+            <!-- Price Display -->
+            <div class="text-center mb-6">
+                <p class="text-sm text-gray-600 mb-1">Total Price</p>
+                <p id="quantity-modal-price" class="text-3xl font-bold text-green-600">₱0.00</p>
+            </div>
+            
+            <!-- Buttons -->
+            <div class="flex gap-3">
+                <button onclick="closeQuantityModal()" class="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-all duration-200">
+                    Cancel
+                </button>
+                <button onclick="confirmAddToCart()" class="flex-1 px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Clear Cart Confirmation Modal -->
+<div id="clear-cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[60] flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full transform transition-all">
+        <div class="p-6">
+            <!-- Icon -->
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+            </div>
+            
+            <!-- Title -->
+            <h3 class="text-xl font-bold text-gray-900 text-center mb-2">Clear Cart?</h3>
+            
+            <!-- Message -->
+            <p class="text-gray-600 text-center mb-6">
+                Are you sure you want to remove all items from your cart? This action cannot be undone.
+            </p>
+            
+            <!-- Buttons -->
+            <div class="flex gap-3">
+                <button onclick="closeClearCartModal()" class="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-all duration-200">
+                    Cancel
+                </button>
+                <button onclick="confirmClearCart()" class="flex-1 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg">
+                    Clear Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 // Initialize global cart variable
 if (typeof window.cart === 'undefined') {
@@ -186,11 +265,111 @@ window.clearCart = function() {
         return;
     }
     
-    if (confirm('Are you sure you want to clear your cart?')) {
-        window.cart = [];
-        saveCart();
-        showToast('Cart cleared', 'info');
+    // Show custom modal instead of browser alert
+    const modal = document.getElementById('clear-cart-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
+}
+
+// Close clear cart modal
+window.closeClearCartModal = function() {
+    const modal = document.getElementById('clear-cart-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Confirm clear cart
+window.confirmClearCart = function() {
+    window.cart = [];
+    saveCart();
+    closeClearCartModal();
+    showToast('Cart cleared successfully', 'info');
+}
+
+// Quantity Modal Functions
+window.modalQuantityData = { id: null, name: '', price: 0, quantity: 1 };
+
+window.showQuantityModal = function(id, name, price) {
+    window.modalQuantityData = { id, name, price: parseFloat(price), quantity: 1 };
+    
+    document.getElementById('quantity-modal-product').textContent = name;
+    document.getElementById('modal-quantity').value = 1;
+    document.getElementById('quantity-modal-price').textContent = `₱${price.toFixed(2)}`;
+    
+    const modal = document.getElementById('quantity-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+window.closeQuantityModal = function() {
+    const modal = document.getElementById('quantity-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+    window.modalQuantityData = { id: null, name: '', price: 0, quantity: 1 };
+}
+
+window.increaseModalQuantity = function() {
+    const input = document.getElementById('modal-quantity');
+    const currentValue = parseInt(input.value) || 1;
+    const newValue = Math.min(currentValue + 1, 999);
+    input.value = newValue;
+    window.modalQuantityData.quantity = newValue;
+    updateModalPrice();
+}
+
+window.decreaseModalQuantity = function() {
+    const input = document.getElementById('modal-quantity');
+    const currentValue = parseInt(input.value) || 1;
+    const newValue = Math.max(currentValue - 1, 1);
+    input.value = newValue;
+    window.modalQuantityData.quantity = newValue;
+    updateModalPrice();
+}
+
+window.updateModalPrice = function() {
+    const totalPrice = window.modalQuantityData.price * window.modalQuantityData.quantity;
+    document.getElementById('quantity-modal-price').textContent = `₱${totalPrice.toFixed(2)}`;
+}
+
+window.updateQuantityFromInput = function() {
+    const input = document.getElementById('modal-quantity');
+    let value = parseInt(input.value) || 1;
+    
+    // Ensure value is within bounds
+    if (value < 1) value = 1;
+    if (value > 999) value = 999;
+    
+    input.value = value;
+    window.modalQuantityData.quantity = value;
+    updateModalPrice();
+}
+
+window.confirmAddToCart = function() {
+    const { id, name, price, quantity } = window.modalQuantityData;
+    
+    // Ensure cart is properly initialized
+    if (!window.cart || !Array.isArray(window.cart)) {
+        window.cart = JSON.parse(sessionStorage.getItem('farmLinkCart')) || [];
+    }
+    
+    const existingItem = window.cart.find(item => item.id === id);
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        window.cart.push({ id, name, price, quantity });
+    }
+    
+    saveCart();
+    closeQuantityModal();
+    showToast(`${quantity} × ${name} added to cart!`, 'success');
 }
 
 // Go to checkout page

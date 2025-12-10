@@ -25,13 +25,18 @@ Route::get('/developers', function () {
     return view('developers');
 })->name('developers');
 
-// Buyer dashboard - for regular users
+// Buyer routes
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
     Route::get('/dashboard', [BuyerController::class, 'dashboard'])->name('dashboard');
+    Route::get('/buyer/orders', [BuyerController::class, 'orders'])->name('buyer.orders');
+    Route::get('/topup', [TopUpController::class, 'index'])->name('topup');
+    Route::post('/topup/process', [TopUpController::class, 'process'])->name('topup.process');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
 });
 
 // Admin routes
@@ -52,10 +57,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/products-archived', [ProductController::class, 'archived'])->name('admin.products.archived');
     Route::patch('/products-archived/{id}/restore', [ProductController::class, 'restore'])->name('admin.products.restore');
     Route::delete('/products-archived/{id}/force-delete', [ProductController::class, 'forceDelete'])->name('admin.products.force-delete');
-    Route::get('/topup', [TopUpController::class, 'index'])->name('topup');
-    Route::post('/topup/process', [TopUpController::class, 'process'])->name('topup.process');
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
 });
 
 // Seller routes - for farmers to manage their products
@@ -67,9 +68,4 @@ Route::middleware(['auth', 'verified'])->prefix('seller')->group(function () {
     Route::put('/products/{product}', [SellerController::class, 'update'])->name('seller.products.update');
     Route::delete('/products/{product}', [SellerController::class, 'destroy'])->name('seller.products.destroy');
     Route::delete('/products/{product}/image', [SellerController::class, 'deleteImage'])->name('seller.products.deleteImage');
-    Route::get('/topup', [TopUpController::class, 'index'])->name('topup');
-    Route::post('/topup/process', [TopUpController::class, 'process'])->name('topup.process');
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
-
 });

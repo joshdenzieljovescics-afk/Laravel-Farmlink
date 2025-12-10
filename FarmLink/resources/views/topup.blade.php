@@ -26,6 +26,35 @@
 
     <main class="pt-20 pb-16">
         <div class="container mx-auto px-4 max-w-6xl">
+            <!-- Success/Error Messages -->
+            @if(session('success'))
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg shadow-md" role="alert">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <p class="font-bold">Success!</p>
+                            <p>{{ session('success') }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg shadow-md" role="alert">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <p class="font-bold">Error!</p>
+                            <p>{{ session('error') }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <!-- Hero Section -->
             <div class="bg-gradient-to-r from-farm-green to-green-600 text-white rounded-lg shadow-lg p-8 mb-8">
                 <div class="flex items-center justify-between">

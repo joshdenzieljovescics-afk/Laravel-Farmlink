@@ -56,12 +56,12 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-b from-white to-gray-50 min-h-screen">
+<body class="bg-gradient-to-b from-white to-gray-50 min-h-screen pt-16">
     <!-- Include Navigation -->
     @include('components.navigation-bar')
     
     <!-- Main Content -->
-    <main class="pt-20">
+    <main>
         <!-- Hero Section -->
         <section class="relative bg-gradient-to-br from-green-600 via-green-500 to-emerald-600 text-white py-24 md:py-32 overflow-hidden">
             <!-- Background Pattern -->
@@ -157,79 +157,74 @@
             @if($featuredProducts->count() > 0)
                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach($featuredProducts as $product)
-                        <div class="group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 transform hover:-translate-y-2">
+                        <div class="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden">
                             <!-- Product Image -->
-                            <div class="relative h-56 overflow-hidden bg-gradient-to-br from-green-50 to-emerald-50">
+                            <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
                                 @if($product->image_path && is_array($product->image_path) && count($product->image_path) > 0)
-                                    <img src="{{ asset('storage/' . $product->image_path[0]) }}" 
+                                    <img src="{{ asset('storage/products/thumbnails/' . $product->image_path[0]) }}" 
                                          alt="{{ $product->name }}" 
-                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                         class="w-full h-full object-cover"
+                                         loading="lazy">
                                 @else
-                                    <div class="w-full h-full bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center">
-                                        <svg class="w-24 h-24 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <svg class="h-16 w-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
                                     </div>
                                 @endif
-                                
-                                <!-- Organic Badge -->
                                 @if($product->is_organic)
-                                    <div class="absolute top-3 right-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center space-x-1">
-                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                        </svg>
-                                        <span>ORGANIC</span>
+                                    <div class="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                                        🌿 Organic
                                     </div>
                                 @endif
-                                
-                                <!-- Quick View Overlay -->
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                @if($product->stock_quantity <= 10 && $product->stock_quantity > 0)
+                                    <div class="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                                        ⚡ Low Stock
+                                    </div>
+                                @endif
                             </div>
                             
-                            <!-- Product Info -->
+                            <!-- Product Details -->
                             <div class="p-5">
-                                <div class="flex items-start justify-between mb-2">
-                                    <h3 class="text-lg font-bold text-gray-800 line-clamp-1 flex-1">{{ $product->name }}</h3>
-                                    <div class="flex items-center space-x-1 text-yellow-400">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                        </svg>
-                                        <span class="text-xs text-gray-600 font-medium">4.8</span>
+                                <div class="mb-3">
+                                    <h3 class="text-lg font-bold text-gray-900 mb-1">{{ $product->name }}</h3>
+                                    <p class="text-sm text-gray-500">{{ $product->category }}</p>
+                                </div>
+                                
+                                <div class="space-y-2 mb-4">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-2xl font-bold text-green-600">₱{{ number_format($product->price, 2) }}</span>
+                                        <span class="text-sm text-gray-500">/{{ $product->unit }}</span>
+                                    </div>
+                                    <div class="flex items-center text-sm">
+                                        @if($product->stock_quantity > 0)
+                                            <svg class="w-4 h-4 text-green-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span class="text-gray-600">{{ $product->stock_quantity }} {{ $product->unit }} available</span>
+                                        @else
+                                            <svg class="w-4 h-4 text-red-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span class="text-red-600 font-medium">Out of Stock</span>
+                                        @endif
                                     </div>
                                 </div>
                                 
-                                <p class="text-gray-500 text-sm mb-3 line-clamp-2 leading-relaxed">{{ Str::limit($product->description, 70) }}</p>
-                                
-                                <div class="flex items-center text-xs text-gray-500 mb-4">
-                                    <svg class="w-4 h-4 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    </svg>
-                                    <span class="font-medium">{{ $product->farm_name ?? $product->seller->name ?? 'Local Farm' }}</span>
-                                </div>
-                                
-                                <div class="flex items-end justify-between pt-3 border-t border-gray-100">
-                                    <div>
-                                        <div class="text-2xl font-bold text-green-600">₱{{ number_format($product->price, 2) }}</div>
-                                        <div class="text-xs text-gray-500">per {{ $product->unit }}</div>
-                                    </div>
-                                    <button onclick="addToCart('{{ $product->id }}', '{{ $product->name }}', {{ $product->price }})" 
-                                            class="group/btn bg-gradient-to-r from-green-600 to-emerald-600 text-white px-5 py-2.5 rounded-xl hover:shadow-lg transition-all duration-300 text-sm font-semibold flex items-center space-x-2 hover:scale-105">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                @if($product->stock_quantity > 0)
+                                    <button onclick="addToCart('{{ $product->id }}', {{ json_encode($product->name) }}, {{ $product->price }})" 
+                                            class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-colors duration-200 flex items-center justify-center">
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                         </svg>
-                                        <span>Add</span>
+                                        Add to Cart
                                     </button>
-                                </div>
-                                
-                                <div class="mt-3 flex items-center justify-between text-xs">
-                                    <span class="text-gray-500">
-                                        <span class="font-semibold text-green-600">{{ $product->stock_quantity }}</span> {{ $product->unit }}{{ $product->stock_quantity > 1 ? 's' : '' }} left
-                                    </span>
-                                    @if($product->stock_quantity < 10)
-                                        <span class="bg-red-100 text-red-600 px-2 py-1 rounded-full font-medium">Low Stock!</span>
-                                    @endif
-                                </div>
+                                @else
+                                    <button disabled 
+                                            class="w-full bg-gray-300 text-gray-500 py-3 px-4 rounded-lg font-semibold cursor-not-allowed">
+                                        Out of Stock
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     @endforeach
@@ -393,16 +388,21 @@
             }
         }
         
-        // Add item to cart
+        // Add item to cart - now shows quantity modal
         function addToCart(id, name, price) {
-            const existingItem = window.cart.find(item => item.id === id);
-            if (existingItem) {
-                existingItem.quantity += 1;
+            if (typeof window.showQuantityModal === 'function') {
+                window.showQuantityModal(id, name, price);
             } else {
-                window.cart.push({ id: id, name: name, price: price, quantity: 1 });
+                // Fallback to direct add
+                const existingItem = window.cart.find(item => item.id === id);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    window.cart.push({ id: id, name: name, price: price, quantity: 1 });
+                }
+                saveCart();
+                showToast(`${name} added to cart!`, 'success');
             }
-            saveCart();
-            showToast(`${name} added to cart!`, 'success');
         }
         
         // Update cart display

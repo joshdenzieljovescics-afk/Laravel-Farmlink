@@ -30,6 +30,7 @@ class User extends Authenticatable
         'password',
         'is_admin',
         'user_type',
+        'farm_tokens',
     ];
 
     /**

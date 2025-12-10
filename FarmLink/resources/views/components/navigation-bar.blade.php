@@ -78,12 +78,14 @@
                                 <div class="px-4 py-2 border-b border-gray-100">
                                     <p class="text-xs text-gray-400 font-semibold uppercase">Manage Account</p>
                                 </div>
-                                <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                    </svg>
-                                    Dashboard
-                                </a>
+                                @if(Auth::user()->user_type !== 'seller')
+                                    <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                        </svg>
+                                        Dashboard
+                                    </a>
+                                @endif
                                 @if(Auth::user()->isAdmin())
                                     <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-2 text-green-600 hover:bg-green-50 transition-colors">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,6 +112,27 @@
                                     </svg>
                                     Profile
                                 </a>
+                                @if(Auth::user()->user_type === 'seller')
+                                    <div class="border-t border-gray-100 my-1"></div>
+                                    @if(request()->routeIs('seller.*'))
+                                        {{-- Show "View as Buyer" only when on seller pages --}}
+                                        <a href="{{ route('products') }}" class="flex items-center px-4 py-2 text-green-600 hover:bg-green-50 transition-colors">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                            View as Buyer
+                                        </a>
+                                    @else
+                                        {{-- Show "Back to Seller Dashboard" only when on buyer pages --}}
+                                        <a href="{{ route('seller.dashboard') }}" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 transition-colors">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                            </svg>
+                                            Back to Seller
+                                        </a>
+                                    @endif
+                                @endif
                                 <div class="border-t border-gray-100 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf

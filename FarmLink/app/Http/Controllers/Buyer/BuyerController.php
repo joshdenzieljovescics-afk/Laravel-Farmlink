@@ -30,4 +30,13 @@ class BuyerController extends Controller
 
         return view('buyer.dashboard', compact('featuredProducts', 'categories'));
     }
+
+    /**
+     * Display buyer's order history
+     */
+    public function orders()
+    {
+        // For now, return a simple view - we'll implement full order tracking later
+        return view('buyer.orders');
+    }
 }

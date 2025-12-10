@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
+                    <a href="@if(Auth::user() && Auth::user()->user_type === 'seller'){{ route('seller.dashboard') }}@else{{ route('dashboard') }}@endif" class="flex items-center space-x-2">
                         <x-application-mark class="block" />
                         <span class="text-xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent hidden sm:block">FarmLink</span>
                     </a>
@@ -13,37 +13,48 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-1 sm:-my-px sm:ms-10 sm:flex items-center">
-                    <a href="{{ route('dashboard') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all {{ request()->routeIs('dashboard') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                        </svg>
-                        Dashboard
-                    </a>
-                    <a href="{{ route('products') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all {{ request()->routeIs('products') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                        </svg>
-                        Products
-                    </a>
                     @if(Auth::user() && Auth::user()->user_type === 'seller')
-                        <a href="{{ route('seller.dashboard') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all {{ request()->routeIs('seller.*') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                        <!-- Seller Navigation -->
+                        <a href="{{ route('seller.dashboard') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all {{ request()->routeIs('seller.dashboard') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                            My Products
+                        </a>
+                        <a href="{{ route('seller.products.create') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all {{ request()->routeIs('seller.products.create') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Add Product
+                        </a>
+                    @else
+                        <!-- Buyer Navigation -->
+                        <a href="{{ route('products') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all {{ request()->routeIs('products') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                            Products
+                        </a>
+                        <a href="{{ route('buyer.orders') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all {{ request()->routeIs('buyer.orders') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                             </svg>
-                            My Products
+                            My Orders
                         </a>
                     @endif
                 </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-3">
-                <!-- Cart Button -->
-                <a href="{{ route('products') }}" class="relative p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
-                    <span id="cart-count" class="absolute -top-1 -right-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg" style="display: none;">0</span>
-                </a>
+                <!-- Cart Button (Only for Buyers) -->
+                @if(Auth::user() && Auth::user()->user_type !== 'seller')
+                    <a href="{{ route('products') }}" class="relative p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg" style="display: none;">0</span>
+                    </a>
+                @endif
 
                 <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
@@ -139,6 +150,32 @@
                                 </x-dropdown-link>
                             @endif
 
+                            @if(Auth::user() && Auth::user()->user_type === 'seller')
+                                <div class="border-t border-gray-200 my-1"></div>
+                                @if(request()->routeIs('seller.*'))
+                                    {{-- Show "View as Buyer" only when on seller pages --}}
+                                    <x-dropdown-link href="{{ route('products') }}">
+                                        <div class="flex items-center text-green-600">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                            View as Buyer
+                                        </div>
+                                    </x-dropdown-link>
+                                @else
+                                    {{-- Show "Back to Seller Dashboard" only when on buyer pages --}}
+                                    <x-dropdown-link href="{{ route('seller.dashboard') }}">
+                                        <div class="flex items-center text-blue-600">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                            </svg>
+                                            Back to Seller
+                                        </div>
+                                    </x-dropdown-link>
+                                @endif
+                            @endif
+
                             <div class="border-t border-gray-200 my-1"></div>
 
                             <form method="POST" action="{{ route('logout') }}" x-data>
@@ -172,24 +209,33 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden border-t border-gray-200">
         <div class="pt-2 pb-3 space-y-1 px-2">
-            <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 rounded-lg {{ request()->routeIs('dashboard') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50' }}">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                </svg>
-                Dashboard
-            </a>
-            <a href="{{ route('products') }}" class="flex items-center px-4 py-3 rounded-lg {{ request()->routeIs('products') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50' }}">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                </svg>
-                Products
-            </a>
             @if(Auth::user() && Auth::user()->user_type === 'seller')
-                <a href="{{ route('seller.dashboard') }}" class="flex items-center px-4 py-3 rounded-lg {{ request()->routeIs('seller.*') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                <!-- Seller Mobile Navigation -->
+                <a href="{{ route('seller.dashboard') }}" class="flex items-center px-4 py-3 rounded-lg {{ request()->routeIs('seller.dashboard') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    My Products
+                </a>
+                <a href="{{ route('seller.products.create') }}" class="flex items-center px-4 py-3 rounded-lg {{ request()->routeIs('seller.products.create') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add Product
+                </a>
+            @else
+                <!-- Buyer Mobile Navigation -->
+                <a href="{{ route('products') }}" class="flex items-center px-4 py-3 rounded-lg {{ request()->routeIs('products') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    Products
+                </a>
+                <a href="{{ route('buyer.orders') }}" class="flex items-center px-4 py-3 rounded-lg {{ request()->routeIs('buyer.orders') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50' }}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                     </svg>
-                    My Products
+                    My Orders
                 </a>
             @endif
         </div>
