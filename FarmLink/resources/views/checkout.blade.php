@@ -81,24 +81,43 @@
             // Initialize autocomplete
             const input = document.getElementById('address-input');
             if (input) {
-                const autocomplete = new google.maps.places.Autocomplete(input, {
-                    componentRestrictions: { country: 'ph' }
-                });
+                try {
+                    const autocomplete = new google.maps.places.Autocomplete(input, {
+                        componentRestrictions: { country: 'ph' },
+                        fields: ['formatted_address', 'geometry', 'name']
+                    });
 
-                autocomplete.addListener('place_changed', function() {
-                    const place = autocomplete.getPlace();
-                    if (place.geometry) {
-                        map.setCenter(place.geometry.location);
-                        map.setZoom(15);
-                        marker.setPosition(place.geometry.location);
-                        selectedLocation = {
-                            lat: place.geometry.location.lat(),
-                            lng: place.geometry.location.lng()
-                        };
-                        selectedAddress = place.formatted_address;
-                        updateAddressDisplay();
-                    }
-                });
+                    autocomplete.addListener('place_changed', function() {
+                        const place = autocomplete.getPlace();
+                        console.log('Place selected:', place);
+                        
+                        if (!place.geometry) {
+                            console.error('No geometry found for place');
+                            alert('Please select an address from the dropdown suggestions');
+                            return;
+                        }
+                        
+                        if (place.geometry) {
+                            map.setCenter(place.geometry.location);
+                            map.setZoom(15);
+                            marker.setPosition(place.geometry.location);
+                            selectedLocation = {
+                                lat: place.geometry.location.lat(),
+                                lng: place.geometry.location.lng()
+                            };
+                            selectedAddress = place.formatted_address;
+                            updateAddressDisplay();
+                            console.log('Address updated:', selectedAddress);
+                        }
+                    });
+                    
+                    console.log('Autocomplete initialized successfully');
+                } catch (error) {
+                    console.error('Error initializing autocomplete:', error);
+                    alert('Address search is not available. Please use the map to select your location by clicking or dragging the marker.');
+                }
+            } else {
+                console.error('Address input element not found');
             }
 
             // Allow clicking on map to set location
@@ -439,12 +458,9 @@
                 if (result.success) {
                     // Clear cart
                     sessionStorage.removeItem('farmLinkCart');
-                    showToast('Order placed successfully!', 'success');
                     
-                    // Redirect after delay
-                    setTimeout(() => {
-                        window.location.href = '{{ route("dashboard") }}';
-                    }, 1500);
+                    // Show success modal
+                    showSuccessModal(result.order_number);
                 } else {
                     showToast(result.message || 'Failed to place order', 'error');
                 }
@@ -452,6 +468,35 @@
                 console.error('Error:', error);
                 showToast('An error occurred. Please try again.', 'error');
             }
+        }
+
+        // Show success modal
+        function showSuccessModal(orderNumber) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform animate-bounce-in">
+                    <div class="text-center">
+                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                            <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Order Placed Successfully!</h3>
+                        <p class="text-gray-600 mb-2">Your order has been received and is waiting for admin approval.</p>
+                        <p class="text-sm text-gray-500 mb-6">Order Number: <span class="font-semibold text-green-600">${orderNumber}</span></p>
+                        <button onclick="redirectToProducts()" class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl">
+                            Continue Shopping
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Redirect to products page
+        function redirectToProducts() {
+            window.location.href = '{{ route("products") }}';
         }
 
         // Show insufficient balance modal

@@ -17,6 +17,7 @@ class SellerController extends Controller
     {
         $products = Product::where('accID', Auth::id())
             ->where('status', 'Y')
+            ->whereNull('deleted_at')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
@@ -195,7 +196,7 @@ class SellerController extends Controller
     }
 
     /**
-     * Soft delete the specified product
+     * Soft delete the specified product (Archive)
      */
     public function destroy(Product $product)
     {
@@ -204,12 +205,75 @@ class SellerController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        // Soft delete by setting status to 'N'
-        $product->update(['status' => 'N']);
+        // Soft delete the product
+        $product->delete();
 
         return redirect()
             ->route('seller.dashboard')
-            ->with('success', 'Product deleted successfully!');
+            ->with('success', 'Product archived successfully!');
+    }
+
+    /**
+     * Display archived products
+     */
+    public function archived()
+    {
+        $products = Product::onlyTrashed()
+            ->where('accID', Auth::id())
+            ->orderBy('deleted_at', 'desc')
+            ->paginate(15);
+
+        return view('seller.archived', compact('products'));
+    }
+
+    /**
+     * Restore archived product
+     */
+    public function restore($id)
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+
+        // Check if the product belongs to the authenticated seller
+        if ($product->accID !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $product->restore();
+
+        return redirect()
+            ->route('seller.products.archived')
+            ->with('success', 'Product restored successfully!');
+    }
+
+    /**
+     * Permanently delete archived product
+     */
+    public function forceDelete($id)
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+
+        // Check if the product belongs to the authenticated seller
+        if ($product->accID !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Delete all images
+        if (is_array($product->image_path)) {
+            foreach ($product->image_path as $image) {
+                if (Storage::disk('public')->exists('products/' . $image)) {
+                    Storage::disk('public')->delete('products/' . $image);
+                }
+                if (Storage::disk('public')->exists('products/thumbnails/' . $image)) {
+                    Storage::disk('public')->delete('products/thumbnails/' . $image);
+                }
+            }
+        }
+
+        $product->forceDelete();
+
+        return redirect()
+            ->route('seller.products.archived')
+            ->with('success', 'Product permanently deleted!');
     }
 
     /**

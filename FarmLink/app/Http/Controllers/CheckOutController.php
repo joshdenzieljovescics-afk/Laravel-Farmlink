@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -59,24 +62,23 @@ class CheckoutController extends Controller
             $user->save();
 
             // Create order record
-            $order = DB::table('orders')->insertGetId([
+            $order = Order::create([
                 'user_id' => $user->id,
+                'order_number' => Order::generateOrderNumber(),
                 'delivery_address' => $request->input('delivery_address'),
-                'delivery_lat' => $deliveryCoords['lat'],  // Changed this
-                'delivery_lng' => $deliveryCoords['lng'],  // Changed this
+                'delivery_latitude' => $deliveryCoords['lat'],
+                'delivery_longitude' => $deliveryCoords['lng'],
                 'delivery_notes' => $request->input('delivery_notes'),
                 'subtotal' => $request->input('subtotal'),
                 'delivery_fee' => $request->input('delivery_fee'),
                 'total' => $request->input('total'),
                 'status' => 'pending',
-                'created_at' => now(),
-                'updated_at' => now()
             ]);
 
             // Create order items and update stock
             foreach ($request->input('items') as $item) {
                 // Check if product has enough stock
-                $product = DB::table('products')->where('id', $item['id'])->first();
+                $product = Product::find($item['id']);
                 
                 if (!$product) {
                     throw new \Exception("Product not found: {$item['name']}");
@@ -87,21 +89,17 @@ class CheckoutController extends Controller
                 }
                 
                 // Create order item
-                DB::table('order_items')->insert([
-                    'order_id' => $order,
+                OrderItem::create([
+                    'order_id' => $order->id,
                     'product_id' => $item['id'],
                     'product_name' => $item['name'],
                     'price' => $item['price'],
                     'quantity' => $item['quantity'],
                     'subtotal' => $item['price'] * $item['quantity'],
-                    'created_at' => now(),
-                    'updated_at' => now()
                 ]);
 
                 // Update product stock
-                DB::table('products')
-                    ->where('id', $item['id'])
-                    ->decrement('stock_quantity', $item['quantity']);
+                $product->decrement('stock_quantity', $item['quantity']);
             }
 
             // Optional: Create transaction record
@@ -109,7 +107,7 @@ class CheckoutController extends Controller
                 'user_id' => $user->id,
                 'type' => 'purchase',
                 'amount' => -$total,
-                'description' => "Order #$order",
+                'description' => "Order {$order->order_number}",
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
@@ -118,8 +116,9 @@ class CheckoutController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Order placed successfully',
-                'order_id' => $order
+                'message' => 'Order placed successfully! Waiting for admin approval.',
+                'order_id' => $order->id,
+                'order_number' => $order->order_number
             ]);
 
         } catch (\Exception $e) {

@@ -63,18 +63,34 @@
                 
                 <div class="relative flex flex-col md:flex-row items-center justify-between">
                     <div class="mb-6 md:mb-0">
-                        <h1 class="text-4xl font-bold text-white mb-2">Welcome back, {{ Auth::user()->name }}! 👨‍🌾</h1>
+                        <h1 class="text-4xl font-bold text-white mb-2 flex items-center">
+                            <svg class="w-10 h-10 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            Welcome back, {{ Auth::user()->name }}!
+                        </h1>
                         <p class="text-green-100 text-lg">Manage your products and grow your farm business</p>
                     </div>
-                    <a href="{{ route('seller.products.create') }}" 
-                       class="group relative bg-white text-green-600 font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
-                        <span class="flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                            </svg>
-                            Add New Product
-                        </span>
-                    </a>
+                    <div class="flex gap-3">
+                        <a href="{{ route('seller.products.archived') }}" 
+                           class="group relative bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+                            <span class="flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                                </svg>
+                                Archived
+                            </span>
+                        </a>
+                        <a href="{{ route('seller.products.create') }}" 
+                           class="group relative bg-white text-green-600 font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
+                            <span class="flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                Add New Product
+                            </span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -212,12 +228,12 @@
                                         <form action="{{ route('seller.products.destroy', $product) }}" 
                                               method="POST" 
                                               class="flex-1"
-                                              onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                              onsubmit="return confirm('Are you sure you want to archive this product?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 
-                                                    class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105">
-                                                Delete
+                                                    class="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105">
+                                                Archive
                                             </button>
                                         </form>
                                     </div>

@@ -2,7 +2,8 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
+            <!-- Logo and Navigation Links -->
+            <div class="flex items-center space-x-8">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="@if(Auth::user() && Auth::user()->user_type === 'seller'){{ route('seller.dashboard') }}@else{{ route('dashboard') }}@endif" class="flex items-center space-x-2">
@@ -12,7 +13,7 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-1 sm:-my-px sm:ms-10 sm:flex items-center">
+                <div class="hidden space-x-1 sm:flex items-center">
                     @if(Auth::user() && Auth::user()->user_type === 'seller')
                         <!-- Seller Navigation -->
                         <a href="{{ route('seller.dashboard') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all {{ request()->routeIs('seller.dashboard') ? 'bg-green-50 text-green-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
@@ -45,7 +46,8 @@
                 </div>
             </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-3">
+            <!-- Right Side Actions -->
+            <div class="hidden sm:flex sm:items-center space-x-3">
                 <!-- Cart Button (Only for Buyers) -->
                 @if(Auth::user() && Auth::user()->user_type !== 'seller')
                     <a href="{{ route('products') }}" class="relative p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all">

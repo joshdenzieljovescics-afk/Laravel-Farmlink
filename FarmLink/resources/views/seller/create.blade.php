@@ -47,7 +47,7 @@
                             </svg>
                             <h3 class="text-xl font-semibold text-gray-800">Product Images</h3>
                         </div>
-                        <div class="bg-gradient-to-br from-green-50 to-green-100 border-2 border-dashed border-green-300 rounded-xl p-8 text-center hover:border-green-500 transition-all duration-300">
+                        <div id="uploadBox" class="bg-gradient-to-br from-green-50 to-green-100 border-2 border-dashed border-green-300 rounded-xl p-8 text-center hover:border-green-500 transition-all duration-300">
                             <input type="file" 
                                    name="images[]" 
                                    id="images" 
@@ -62,8 +62,8 @@
                                 <p class="text-lg font-medium text-gray-700 mb-1">Click to upload product images</p>
                                 <p class="text-sm text-gray-500">PNG, JPG, WEBP up to 5MB each</p>
                             </label>
-                            <div id="preview" class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4"></div>
                         </div>
+                        <div id="preview" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4"></div>
                         @error('images.*')
                             <p class="text-red-500 text-sm mt-2 flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -319,13 +319,24 @@
     </div>
 
     <script>
+        let selectedFiles = [];
+
         function handleFileSelect(event) {
-            const files = event.target.files;
+            const files = Array.from(event.target.files);
+            selectedFiles = files;
+            updatePreview();
+        }
+
+        function updatePreview() {
             const preview = document.getElementById('preview');
+            const uploadBox = document.getElementById('uploadBox');
             preview.innerHTML = '';
 
-            if (files.length > 0) {
-                Array.from(files).forEach((file, index) => {
+            if (selectedFiles.length > 0) {
+                uploadBox.classList.add('hidden');
+                preview.classList.remove('hidden');
+
+                selectedFiles.forEach((file, index) => {
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const div = document.createElement('div');
@@ -334,18 +345,33 @@
                             <img src="${e.target.result}" 
                                  class="w-full h-32 object-cover rounded-lg border-2 border-green-200 group-hover:border-green-400 transition-all duration-200 shadow-sm"
                                  alt="Preview ${index + 1}">
-                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-200 flex items-center justify-center">
-                                <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            <button type="button" 
+                                    onclick="removeImage(${index})"
+                                    class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
-                            </div>
+                            </button>
                         `;
                         preview.appendChild(div);
                     };
                     reader.readAsDataURL(file);
                 });
+            } else {
+                uploadBox.classList.remove('hidden');
+                preview.classList.add('hidden');
             }
+        }
+
+        function removeImage(index) {
+            selectedFiles.splice(index, 1);
+            
+            // Update the file input
+            const dt = new DataTransfer();
+            selectedFiles.forEach(file => dt.items.add(file));
+            document.getElementById('images').files = dt.files;
+            
+            updatePreview();
         }
     </script>
 </body>

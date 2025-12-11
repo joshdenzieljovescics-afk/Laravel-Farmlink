@@ -29,12 +29,12 @@
         }
     </style>
 </head>
-<body class="bg-farm-cream min-h-screen">
+<body class="bg-white min-h-screen">
     <!-- Include Navigation -->
     @include('components.navigation-bar')
 
     <!-- Main Content -->
-    <main class="pt-20 pb-16">
+    <main class="pt-16">
         <!-- Hero Section -->
         <section class="relative overflow-hidden bg-gradient-to-r from-green-600 to-green-700 text-white py-16">
             <!-- Decorative background elements -->
@@ -209,7 +209,7 @@
 
     <!-- Footer -->
     <footer class="bg-gradient-to-r from-green-800 to-green-900 text-white">
-        <div class="container mx-auto px-4 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <!-- About Section -->
                 <div>
@@ -239,6 +239,7 @@
                         <li><a href="{{ route('products') }}" class="text-green-100 hover:text-white transition-colors">Products</a></li>
                         <li><a href="{{ route('about') }}" class="text-green-100 hover:text-white transition-colors">About Us</a></li>
                         <li><a href="{{ route('contact') }}" class="text-green-100 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="{{ route('developers') }}" class="text-green-100 hover:text-white transition-colors">Developers</a></li>
                     </ul>
                 </div>
 
@@ -246,9 +247,11 @@
                 <div>
                     <h4 class="text-lg font-bold mb-4">Categories</h4>
                     <ul class="space-y-2">
-                        @foreach($categories->take(5) as $category)
-                            <li><a href="{{ route('products', ['category' => strtolower($category)]) }}" class="text-green-100 hover:text-white transition-colors">{{ $category }}</a></li>
-                        @endforeach
+                        <li><a href="#" class="text-green-100 hover:text-white transition-colors">Vegetables</a></li>
+                        <li><a href="#" class="text-green-100 hover:text-white transition-colors">Fruits</a></li>
+                        <li><a href="#" class="text-green-100 hover:text-white transition-colors">Grains</a></li>
+                        <li><a href="#" class="text-green-100 hover:text-white transition-colors">Dairy</a></li>
+                        <li><a href="#" class="text-green-100 hover:text-white transition-colors">Meat</a></li>
                     </ul>
                 </div>
 

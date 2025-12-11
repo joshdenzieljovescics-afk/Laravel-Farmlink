@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('order_number')->unique();
+            $table->decimal('subtotal', 10, 2);
+            $table->decimal('delivery_fee', 10, 2);
+            $table->decimal('total', 10, 2);
             $table->text('delivery_address');
             $table->decimal('delivery_latitude', 10, 7)->nullable();
             $table->decimal('delivery_longitude', 10, 7)->nullable();
             $table->text('delivery_notes')->nullable();
-            $table->decimal('subtotal', 10, 2);
-            $table->decimal('delivery_fee', 10, 2)->default(50.00);
-            $table->decimal('total', 10, 2);
             $table->enum('status', ['pending', 'approved', 'rejected', 'completed', 'cancelled'])->default('pending');
             $table->text('admin_notes')->nullable();
             $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
