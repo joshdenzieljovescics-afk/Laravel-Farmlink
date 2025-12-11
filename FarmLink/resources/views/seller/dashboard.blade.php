@@ -20,84 +20,56 @@
         }
     </script>
 </head>
-<body class="bg-gradient-to-br from-green-50 via-white to-blue-50 min-h-screen">
+<body class="bg-gradient-to-br from-green-50 via-white to-green-50 min-h-screen">
     @include('navigation-menu')
 
-    <div class="pt-20 pb-12 bg-gradient-to-br from-green-50 via-white to-blue-50 min-h-screen">
+    <!-- Modals -->
+    @include('components.success-modal')
+    @include('components.error-modal')
+    @include('components.confirm-modal')
+
+    <div class="pt-16 pb-12 bg-gradient-to-br from-green-50 via-white to-green-50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <!-- Success/Error Messages -->
-            @if(session('success'))
-                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg shadow-md" role="alert">
-                    <div class="flex items-center">
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+            <!-- Hero Section -->
+            <div class="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-gradient-to-r from-green-600 to-green-700 text-white py-12 mb-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center justify-between">
                         <div>
-                            <p class="font-bold">Success!</p>
-                            <p>{{ session('success') }}</p>
+                            <h1 class="text-4xl font-bold mb-2">My Products</h1>
+                            <p class="text-green-100">Manage your farm products and grow your business</p>
                         </div>
-                    </div>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg shadow-md" role="alert">
-                    <div class="flex items-center">
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <div>
-                            <p class="font-bold">Error!</p>
-                            <p>{{ session('error') }}</p>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            <!-- Welcome Section with Gradient -->
-            <div class="relative overflow-hidden bg-gradient-to-r from-green-600 to-green-700 rounded-2xl shadow-2xl mb-8 p-8">
-                <!-- Decorative background elements -->
-                <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-                <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-60 h-60 bg-white/10 rounded-full blur-3xl"></div>
-                
-                <div class="relative flex flex-col md:flex-row items-center justify-between">
-                    <div class="mb-6 md:mb-0">
-                        <h1 class="text-4xl font-bold text-white mb-2 flex items-center">
-                            <svg class="w-10 h-10 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        <div class="hidden md:block">
+                            <svg class="w-24 h-24 text-green-500 opacity-50" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
                             </svg>
-                            Welcome back, {{ Auth::user()->name }}!
-                        </h1>
-                        <p class="text-green-100 text-lg">Manage your products and grow your farm business</p>
-                    </div>
-                    <div class="flex gap-3">
-                        <a href="{{ route('seller.products.archived') }}" 
-                           class="group relative bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
-                            <span class="flex items-center">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
-                                </svg>
-                                Archived
-                            </span>
-                        </a>
-                        <a href="{{ route('seller.products.create') }}" 
-                           class="group relative bg-white text-green-600 font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
-                            <span class="flex items-center">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                </svg>
-                                Add New Product
-                            </span>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Action Buttons -->
+            <div class="flex gap-3 mb-8">
+                <a href="{{ route('seller.products.archived') }}" 
+                   class="bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                    </svg>
+                    Archived
+                </a>
+                <a href="{{ route('seller.products.create') }}" 
+                   class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add New Product
+                </a>
+            </div>
+
             <!-- Quick Stats with Modern Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <!-- Total Products -->
-                <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border border-gray-100 overflow-hidden">
+                <div class="group relative bg-white rounded-2xl shadow-lg transition-all duration-300 p-6 border border-gray-100 overflow-hidden">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/10 to-green-600/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
                     <div class="relative flex items-center">
                         <div class="flex-shrink-0 bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
@@ -113,10 +85,10 @@
                 </div>
 
                 <!-- Active Products -->
-                <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border border-gray-100 overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="group relative bg-white rounded-2xl shadow-lg transition-all duration-300 p-6 border border-gray-100 overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/10 to-green-600/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
                     <div class="relative flex items-center">
-                        <div class="flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <div class="flex-shrink-0 bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
                             <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
@@ -128,18 +100,34 @@
                     </div>
                 </div>
 
-                <!-- Total Stock -->
-                <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border border-gray-100 overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <!-- Low Stock -->
+                <div class="group relative bg-white rounded-2xl shadow-lg transition-all duration-300 p-6 border border-gray-100 overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-400/10 to-green-500/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
                     <div class="relative flex items-center">
-                        <div class="flex-shrink-0 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <div class="flex-shrink-0 bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
                             <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                         </div>
                         <div class="ml-5">
-                            <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Stock</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-1">{{ $products->sum('stock_quantity') }}</p>
+                            <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Low Stock</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1">{{ $products->where('stock_quantity', '<', 10)->count() }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Organic Products -->
+                <div class="group relative bg-white rounded-2xl shadow-lg transition-all duration-300 p-6 border border-gray-100 overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-600/10 to-green-700/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                    <div class="relative flex items-center">
+                        <div class="flex-shrink-0 bg-gradient-to-br from-green-600 to-green-700 rounded-xl p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                        </div>
+                        <div class="ml-5">
+                            <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Organic</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1">{{ $products->where('is_organic', true)->count() }}</p>
                         </div>
                     </div>
                 </div>
@@ -173,7 +161,7 @@
                 @else
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         @foreach($products as $product)
-                            <div class="group bg-white border border-gray-200 rounded-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+                            <div class="group bg-white border border-gray-200 rounded-xl shadow-md transition-all duration-300 overflow-hidden">
                                 <!-- Product Image -->
                                 <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
                                     @if($product->image_path && is_array($product->image_path) && count($product->image_path) > 0)
@@ -189,17 +177,10 @@
                                     @endif
                                     @if($product->is_organic)
                                         <div class="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                                            🌿 Organic
-                                        </div>
-                                    @endif
-                                    @if(!$product->is_active)
-                                        <div class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                                            Inactive
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <!-- Product Details -->
+                                        🌿 Organic
+                                    </div>
+                                @endif
+                            </div>                                <!-- Product Details -->
                                 <div class="p-5">
                                     <div class="mb-3">
                                         <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-green-600 transition-colors">{{ $product->name }}</h3>
@@ -222,17 +203,26 @@
                                     <!-- Actions -->
                                     <div class="flex gap-2">
                                         <a href="{{ route('seller.products.edit', $product) }}" 
-                                           class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-center py-2 px-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105">
+                                           class="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white text-center py-2 px-4 rounded-lg font-semibold transition-all duration-200">
                                             Edit
                                         </a>
-                                        <form action="{{ route('seller.products.destroy', $product) }}" 
+                                        <form id="archive-form-{{ $product->id }}" 
+                                              action="{{ route('seller.products.destroy', $product) }}" 
                                               method="POST" 
                                               class="flex-1"
-                                              onsubmit="return confirm('Are you sure you want to archive this product?');">
+                                              x-data="{ archiveFormId: 'archive-form-{{ $product->id }}' }">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" 
-                                                    class="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105">
+                                            <button type="button" 
+                                                    @click="$dispatch('open-confirm-modal', { 
+                                                        title: 'Archive Product', 
+                                                        message: 'Are you sure you want to archive this product? You can restore it later from the archived products page.', 
+                                                        confirmText: 'Archive', 
+                                                        cancelText: 'Cancel', 
+                                                        type: 'danger', 
+                                                        formId: archiveFormId 
+                                                    })"
+                                                    class="w-full bg-gradient-to-r from-green-700 to-green-800 hover:from-green-800 hover:to-green-900 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-200">
                                                 Archive
                                             </button>
                                         </form>

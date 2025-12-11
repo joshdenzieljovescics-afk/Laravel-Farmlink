@@ -97,6 +97,7 @@ class SellerController extends Controller
             'farm_name' => $validated['farm_name'] ?? null,
             'image_path' => $imagePaths,
             'is_organic' => $validated['is_organic'] ?? false,
+            'is_active' => true,  // Always set active
             'accID' => Auth::id(),
             'status' => 'Y',
         ]);
@@ -122,20 +123,38 @@ class SellerController extends Controller
     {
         // Check if the product belongs to the authenticated seller
         if ($product->accID !== Auth::id()) {
+            \Log::error('Unauthorized update attempt', [
+                'product_id' => $product->id,
+                'product_owner' => $product->accID,
+                'current_user' => Auth::id()
+            ]);
             abort(403, 'Unauthorized action.');
         }
 
-        $validated = $request->validate([
-            'product_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'unit_measure' => 'required|string|max:50',
-            'product_category' => 'required|string|max:100',
-            'avail_qty' => 'required|numeric|min:0',
-            'farm_name' => 'nullable|string|max:255',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-            'is_organic' => 'nullable|boolean',
+        // Log request data for debugging
+        \Log::info('Product Update Request', [
+            'product_id' => $product->id,
+            'request_data' => $request->all()
         ]);
+
+        try {
+            $validated = $request->validate([
+                'product_name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric|min:0',
+                'unit_measure' => 'required|string|max:50',
+                'product_category' => 'required|string|max:100',
+                'avail_qty' => 'required|numeric|min:0',
+                'farm_name' => 'nullable|string|max:255',
+                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+                'is_organic' => 'nullable|in:1,0',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation failed', [
+                'errors' => $e->errors()
+            ]);
+            throw $e;
+        }
 
         $imagePaths = $product->image_path ?? [];
 
@@ -187,7 +206,13 @@ class SellerController extends Controller
             'stock_quantity' => $validated['avail_qty'],  // Also populate old column
             'farm_name' => $validated['farm_name'] ?? null,
             'image_path' => $imagePaths,
-            'is_organic' => $validated['is_organic'] ?? false,
+            'is_organic' => $request->has('is_organic') ? 1 : 0,
+            'is_active' => true,  // Always set active
+        ]);
+
+        \Log::info('Product Updated Successfully', [
+            'product_id' => $product->id,
+            'updated_data' => $product->toArray()
         ]);
 
         return redirect()

@@ -35,7 +35,7 @@ class ProductController extends Controller
             'stock_quantity' => 'required|integer|min:0'
         ]);
 
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = true;  // Always set active
         $validated['is_organic'] = $request->has('is_organic');
 
         // Handle multiple image uploads
@@ -100,7 +100,7 @@ class ProductController extends Controller
             'stock_quantity' => 'required|integer|min:0'
         ]);
 
-        $validated['is_active'] = $request->has('is_active');
+        $validated['is_active'] = true;  // Always set active
         $validated['is_organic'] = $request->has('is_organic');
 
         // Handle multiple image uploads

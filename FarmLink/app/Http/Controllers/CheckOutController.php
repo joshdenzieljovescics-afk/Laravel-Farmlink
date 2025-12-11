@@ -84,8 +84,11 @@ class CheckoutController extends Controller
                     throw new \Exception("Product not found: {$item['name']}");
                 }
                 
-                if ($product->stock_quantity < $item['quantity']) {
-                    throw new \Exception("Insufficient stock for {$item['name']}. Only {$product->stock_quantity} available.");
+                // Check stock using both columns for compatibility
+                $currentStock = $product->avail_qty ?? $product->stock_quantity;
+                
+                if ($currentStock < $item['quantity']) {
+                    throw new \Exception("Insufficient stock for {$item['name']}. Only {$currentStock} available.");
                 }
                 
                 // Create order item
@@ -100,6 +103,7 @@ class CheckoutController extends Controller
 
                 // Update product stock
                 $product->decrement('stock_quantity', $item['quantity']);
+                $product->decrement('avail_qty', $item['quantity']);
             }
 
             // Optional: Create transaction record

@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Archived Products - FarmLink Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -19,101 +20,120 @@
         }
     </script>
 </head>
-<body class="bg-farm-cream min-h-screen">
-    <!-- Include Navigation -->
+<body class="bg-gradient-to-br from-green-50 via-white to-green-50 min-h-screen">
     @include('components.navigation-bar')
 
-    <!-- Main Content -->
-    <main class="pt-20 pb-16">
-        <!-- Hero Section -->
-        <section class="relative overflow-hidden bg-gradient-to-r from-orange-600 to-orange-700 text-white py-12">
-            <div class="absolute top-0 right-0 -mt-10 -mr-10 w-60 h-60 bg-white/10 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+    <!-- Modals -->
+    @include('components.success-modal')
+    @include('components.error-modal')
+    @include('components.confirm-modal')
+
+    <div class="pt-16 pb-12 bg-gradient-to-br from-green-50 via-white to-green-50 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div class="container mx-auto px-4 relative z-10">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-4xl font-bold mb-2">🗃️ Archived Products</h1>
-                        <p class="text-orange-100">Manage archived products - restore or permanently delete</p>
+            <!-- Hero Section -->
+            <div class="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-gradient-to-r from-green-600 to-green-700 text-white py-12 mb-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-4xl font-bold mb-2">Archived Products</h1>
+                            <p class="text-green-100">Manage archived products - restore or permanently delete</p>
+                        </div>
+                        <div class="hidden md:block">
+                            <svg class="w-24 h-24 text-green-500 opacity-50" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+                            </svg>
+                        </div>
                     </div>
-                    <a href="{{ route('admin.products.index') }}" 
-                       class="bg-white text-orange-600 px-6 py-3 rounded-xl font-semibold hover:bg-orange-50 transition-all duration-200 transform hover:scale-105 shadow-lg">
-                        ← Back to Products
-                    </a>
                 </div>
             </div>
-        </section>
 
-        <div class="container mx-auto px-4 py-8">
-            <!-- Archived Products Stats -->
+            <!-- Action Button -->
+            <div class="flex gap-3 mb-8">
+                <a href="{{ route('admin.products.index') }}" 
+                   class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Products
+                </a>
+            </div>
+            <!-- Quick Stats with Modern Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition-all duration-200">
-                    <div class="flex items-center">
-                        <div class="p-4 rounded-xl bg-orange-100 text-orange-600 text-3xl">
-                            🗃️
+                <!-- Total Archived -->
+                <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border border-gray-100 overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/10 to-green-600/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                    <div class="relative flex items-center">
+                        <div class="flex-shrink-0 bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                            </svg>
                         </div>
-                        <div class="ml-4">
-                            <h3 class="text-sm font-medium text-gray-600">Total Archived</h3>
-                            <p class="text-3xl font-bold text-gray-900">{{ $products->total() }}</p>
+                        <div class="ml-5">
+                            <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Archived</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1">{{ $products->total() }}</p>
                         </div>
                     </div>
                 </div>
-                
-                <div class="bg-white rounded-2xl shadow-lg p-6 transform hover:scale-105 transition-all duration-200">
-                    <div class="flex items-center">
-                        <div class="p-4 rounded-xl bg-blue-100 text-blue-600 text-3xl">
-                            ♻️
+
+                <!-- Can Be Restored -->
+                <div class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border border-gray-100 overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-600/10 to-green-700/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500"></div>
+                    <div class="relative flex items-center">
+                        <div class="flex-shrink-0 bg-gradient-to-br from-green-600 to-green-700 rounded-xl p-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
                         </div>
-                        <div class="ml-4">
-                            <h3 class="text-sm font-medium text-gray-600">Can Be Restored</h3>
-                            <p class="text-3xl font-bold text-gray-900">{{ $products->count() }}</p>
+                        <div class="ml-5">
+                            <p class="text-sm font-medium text-gray-500 uppercase tracking-wide">Can Be Restored</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-1">{{ $products->count() }}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            @if($products->count() > 0)
-                <!-- Archived Products Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Products Section -->
+            <div class="bg-white overflow-hidden shadow-xl rounded-2xl p-8 border border-gray-100">
+                @if($products->count() > 0)
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach($products as $product)
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-200 opacity-75 hover:opacity-100">
+                        <div class="group bg-white border border-gray-200 rounded-xl shadow-md transition-all duration-300 overflow-hidden">
                             <!-- Product Image -->
-                            <div class="relative h-48 bg-gray-100">
+                            <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
                                 @php
                                     $firstImage = is_array($product->image_path) ? ($product->image_path[0] ?? null) : $product->image_path;
                                 @endphp
                                 @if($firstImage)
                                     <img src="{{ asset('storage/products/thumbnails/' . $firstImage) }}" 
                                          alt="{{ $product->name }}" 
-                                         class="w-full h-full object-cover grayscale">
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 opacity-75">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center text-6xl grayscale">
-                                        🥬
+                                    <div class="w-full h-full flex items-center justify-center opacity-75">
+                                        <svg class="h-16 w-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
                                     </div>
                                 @endif
                                 
                                 <!-- Archived Badge -->
-                                <div class="absolute top-3 left-3">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-500 text-white shadow-lg">
-                                        🗃️ Archived
-                                    </span>
+                                <div class="absolute top-3 left-3 bg-gray-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                                    Archived
                                 </div>
 
                                 <!-- Organic Badge -->
                                 @if($product->is_organic)
-                                    <div class="absolute top-3 right-3">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-600 text-white shadow-lg">
-                                            🌱 Organic
-                                        </span>
+                                    <div class="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                                        🌿 Organic
                                     </div>
                                 @endif
                             </div>
 
-                            <!-- Product Info -->
-                            <div class="p-6">
-                                <div class="mb-4">
-                                    <h3 class="text-lg font-bold text-gray-900 mb-1 line-clamp-2">{{ $product->name }}</h3>
-                                    <p class="text-sm text-gray-500 mb-2">{{ $product->category }}</p>
+                            <!-- Product Details -->
+                            <div class="p-5">
+                                <div class="mb-3">
+                                    <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-green-600 transition-colors">{{ $product->name }}</h3>
+                                    <p class="text-sm text-gray-500">{{ $product->category }}</p>
                                     @if($product->farm_name)
                                         <p class="text-xs text-gray-400 flex items-center">
                                             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,47 +144,42 @@
                                     @endif
                                 </div>
 
-                                <div class="border-t border-gray-200 pt-4 mb-4">
-                                    <div class="flex justify-between items-center mb-2">
+                                
+                                <div class="space-y-2 mb-4">
+                                    <div class="flex items-center justify-between">
                                         <span class="text-2xl font-bold text-green-600">₱{{ number_format($product->price, 2) }}</span>
-                                        <span class="text-sm text-gray-500">per {{ $product->unit }}</span>
+                                        <span class="text-sm text-gray-500">/{{ $product->unit }}</span>
                                     </div>
                                     <div class="text-xs text-gray-400">
-                                        Archived: {{ $product->deleted_at->format('M d, Y') }}
-                                        <div>{{ $product->deleted_at->diffForHumans() }}</div>
+                                        <div>Archived {{ $product->deleted_at->diffForHumans() }}</div>
                                     </div>
                                 </div>
 
-                                <!-- Action Buttons -->
+                                <!-- Actions -->
                                 <div class="flex gap-2">
-                                    <!-- Restore Button -->
-                                    <form method="POST" 
+                                    <form id="restore-form-{{ $product->id }}" 
+                                          method="POST" 
                                           action="{{ route('admin.products.restore', $product->id) }}" 
                                           class="flex-1"
-                                          onsubmit="return confirm('Restore this product?')">
+                                          x-data="{ restoreFormId: 'restore-form-{{ $product->id }}' }">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" 
-                                                class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105 shadow-md flex items-center justify-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                            </svg>
+                                        <button type="button" 
+                                                @click="$dispatch('open-confirm-modal', { title: 'Restore Product', message: 'Are you sure you want to restore this product? It will be available again in the products list.', confirmText: 'Restore', cancelText: 'Cancel', type: 'info', formId: restoreFormId })"
+                                                class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white text-center py-2 px-4 rounded-lg font-semibold transition-all duration-200">
                                             Restore
                                         </button>
                                     </form>
-                                    
-                                    <!-- Permanent Delete Button -->
-                                    <form method="POST" 
+                                    <form id="delete-form-{{ $product->id }}" 
+                                          method="POST" 
                                           action="{{ route('admin.products.force-delete', $product->id) }}" 
                                           class="flex-1"
-                                          onsubmit="return confirm('PERMANENTLY delete? This cannot be undone!')">
+                                          x-data="{ deleteFormId: 'delete-form-{{ $product->id }}' }">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" 
-                                                class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105 shadow-md flex items-center justify-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
+                                        <button type="button" 
+                                                @click="$dispatch('open-confirm-modal', { title: 'Permanently Delete', message: 'Are you sure you want to PERMANENTLY delete this product? This action CANNOT be undone!', confirmText: 'Delete Forever', cancelText: 'Cancel', type: 'danger', formId: deleteFormId })"
+                                                class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-200">
                                             Delete
                                         </button>
                                     </form>
@@ -175,18 +190,21 @@
                 </div>
                 
                 <!-- Pagination -->
-                <div class="mt-8">
-                    {{ $products->links() }}
-                </div>
+                @if($products->hasPages())
+                    <div class="mt-8">
+                        {{ $products->links() }}
+                    </div>
+                @endif
             @else
-                <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
-                    <div class="text-gray-400 text-8xl mb-6">🗃️</div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-3">No Archived Products</h3>
-                    <p class="text-gray-500 mb-6 max-w-md mx-auto">
-                        Products that you archive will appear here. You can restore them anytime or delete them permanently.
-                    </p>
-                    <a href="{{ route('admin.products.index') }}" 
-                       class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg">
+                <div class="text-center py-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl">
+                    <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-green-100 to-green-200 rounded-full mb-6">
+                        <svg class="h-12 w-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-3">No Archived Products</h3>
+                    <p class="text-gray-600 text-lg mb-6 max-w-md mx-auto">Products that you archive will appear here. You can restore them anytime or delete them permanently.</p>
+                    <a href="{{ route('admin.products.index') }}" class="inline-flex items-center bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
@@ -194,23 +212,8 @@
                     </a>
                 </div>
             @endif
-        </div>
-    </main>
-
-    @if(session('success'))
-        <div class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl animate-bounce z-50">
-            <div class="flex items-center">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                {{ session('success') }}
             </div>
         </div>
-        <script>
-            setTimeout(() => {
-                document.querySelector('.animate-bounce').style.display = 'none';
-            }, 3000);
-        </script>
-    @endif
+    </div>
 </body>
 </html>

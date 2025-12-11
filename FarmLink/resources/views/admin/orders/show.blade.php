@@ -21,9 +21,8 @@
                         <div>
                             <div class="flex items-center gap-4 mb-2">
                                 <h1 class="text-4xl font-bold">Order Details</h1>
-                                <span class="text-2xl font-mono">{{ $order->order_number }}</span>
                             </div>
-                            <p class="text-green-100">View and manage order information</p>
+                            <p class="text-green-100">{{ $order->order_number }}</p>
                         </div>
                         <div class="hidden md:block">
                             <a href="{{ route('admin.orders.index') }}" class="bg-white text-green-600 hover:bg-green-50 px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2">
@@ -59,23 +58,23 @@
                             <h3 class="text-2xl font-bold text-gray-900 mb-3">Order Status</h3>
                             <div class="mt-2">
                                 @if($order->status === 'pending')
-                                    <span class="px-4 py-2 inline-flex text-base leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                        ⏳ Pending Approval
+                                    <span class="px-4 py-2 inline-flex text-base leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Pending Approval
                                     </span>
                                 @elseif($order->status === 'approved')
-                                    <span class="px-4 py-2 inline-flex text-base leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        ✓ Approved
+                                    <span class="px-4 py-2 inline-flex text-base leading-5 font-semibold rounded-full bg-green-600 text-white">
+                                        Approved
                                     </span>
                                 @elseif($order->status === 'rejected')
                                     <span class="px-4 py-2 inline-flex text-base leading-5 font-semibold rounded-full bg-gray-600 text-white">
-                                        ✗ Rejected
+                                        Rejected
                                     </span>
                                 @elseif($order->status === 'completed')
-                                    <span class="px-4 py-2 inline-flex text-base leading-5 font-semibold rounded-full bg-green-600 text-white">
-                                        ✓ Completed
+                                    <span class="px-4 py-2 inline-flex text-base leading-5 font-semibold rounded-full bg-green-700 text-white">
+                                        Completed
                                     </span>
                                 @elseif($order->status === 'cancelled')
-                                    <span class="px-4 py-2 inline-flex text-base leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                    <span class="px-4 py-2 inline-flex text-base leading-5 font-semibold rounded-full bg-gray-500 text-white">
                                         Cancelled
                                     </span>
                                 @endif
@@ -96,10 +95,10 @@
                         @if($order->status === 'pending')
                             <div class="flex space-x-3">
                                 <button onclick="showApproveModal()" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold shadow-md hover:shadow-lg transition-all duration-200">
-                                    ✓ Approve Order
+                                    Approve Order
                                 </button>
                                 <button onclick="showRejectModal()" class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 font-semibold shadow-md hover:shadow-lg transition-all duration-200">
-                                    ✗ Reject Order
+                                    Reject Order
                                 </button>
                             </div>
                         @endif
@@ -114,16 +113,16 @@
                         <h3 class="text-xl font-bold text-gray-900 mb-4">Customer Information</h3>
                         <div class="space-y-3">
                             <div>
-                                <p class="text-sm text-gray-600">Name</p>
-                                <p class="text-sm font-medium text-gray-900">{{ $order->user->name }}</p>
+                                <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Name</p>
+                                <p class="text-base font-medium text-gray-900">{{ $order->user->name }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600">Email</p>
-                                <p class="text-sm font-medium text-gray-900">{{ $order->user->email }}</p>
+                                <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Email</p>
+                                <p class="text-base font-medium text-gray-900">{{ $order->user->email }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600">Order Date</p>
-                                <p class="text-sm font-medium text-gray-900">{{ $order->created_at->format('M d, Y h:i A') }}</p>
+                                <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Order Date</p>
+                                <p class="text-base font-medium text-gray-900">{{ $order->created_at->format('M d, Y h:i A') }}</p>
                             </div>
                         </div>
                     </div>
@@ -135,19 +134,19 @@
                         <h3 class="text-xl font-bold text-gray-900 mb-4">Delivery Information</h3>
                         <div class="space-y-3">
                             <div>
-                                <p class="text-sm text-gray-600">Delivery Address</p>
-                                <p class="text-sm font-medium text-gray-900">{{ $order->delivery_address }}</p>
+                                <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Delivery Address</p>
+                                <p class="text-base font-medium text-gray-900">{{ $order->delivery_address }}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600">Coordinates</p>
-                                <p class="text-sm font-medium text-gray-900">
+                                <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Coordinates</p>
+                                <p class="text-base font-medium text-gray-900">
                                     Lat: {{ $order->delivery_latitude }}, Lng: {{ $order->delivery_longitude }}
                                 </p>
                             </div>
                             @if($order->delivery_notes)
                                 <div>
-                                    <p class="text-sm text-gray-600">Delivery Notes</p>
-                                    <p class="text-sm font-medium text-gray-900">{{ $order->delivery_notes }}</p>
+                                    <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Delivery Notes</p>
+                                    <p class="text-base font-medium text-gray-900">{{ $order->delivery_notes }}</p>
                                 </div>
                             @endif
                         </div>
