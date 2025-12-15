@@ -73,20 +73,29 @@
                                 <div class="px-4 py-2 border-b border-gray-100">
                                     <p class="text-xs text-gray-400 font-semibold uppercase">Manage Account</p>
                                 </div>
+                                
+                                {{-- Admin Menu Items - Only Manage Products --}}
                                 @if(Auth::user()->isAdmin())
-                                    <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-2 text-green-600 hover:bg-green-50 transition-colors">
+                                    <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-2 text-purple-600 hover:bg-purple-50 transition-colors">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                                         </svg>
                                         Manage Products
                                     </a>
+                                    <div class="border-t border-gray-100 my-1"></div>
+                                @endif
+
+                                {{-- Seller Menu Items - Only Manage Orders --}}
+                                @if(Auth::user()->user_type === 'seller')
                                     <a href="{{ route('admin.orders.index') }}" class="flex items-center px-4 py-2 text-green-600 hover:bg-green-50 transition-colors">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                         </svg>
                                         Manage Orders
                                     </a>
+                                    <div class="border-t border-gray-100 my-1"></div>
                                 @endif
+                                
                                 <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -155,12 +164,6 @@
         </div>
 
         <!-- Mobile Navigation -->
-        <!-- <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
-            <div class="px-4 py-3 space-y-2">
-                <a href="/products" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">Products</a>
-                <a href="/about" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">About</a>
-                <a href="/contact" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">Contact</a>
-                <a href="/developers" class="block px-4 py-2.5 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg font-medium transition-all">Developers</a> -->
         <div id="mobile-menu" class="md:hidden hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 border-t">
                 @auth

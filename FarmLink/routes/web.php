@@ -79,4 +79,8 @@ Route::middleware(['auth', 'verified'])->prefix('seller')->group(function () {
     Route::post('/products/{id}/restore', [SellerController::class, 'restore'])->name('seller.products.restore');
     Route::delete('/products/{id}/force-delete', [SellerController::class, 'forceDelete'])->name('seller.products.forceDelete');
     Route::delete('/products/{product}/image', [SellerController::class, 'deleteImage'])->name('seller.products.deleteImage');
+    Route::get('/orders', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/orders/{id}', [App\Http\Controllers\Admin\OrderController::class, 'show'])->name('admin.orders.show');
+    Route::post('/orders/{id}/approve', [App\Http\Controllers\Admin\OrderController::class, 'approve'])->name('admin.orders.approve');
+    Route::post('/orders/{id}/reject', [App\Http\Controllers\Admin\OrderController::class, 'reject'])->name('admin.orders.reject');
 });
