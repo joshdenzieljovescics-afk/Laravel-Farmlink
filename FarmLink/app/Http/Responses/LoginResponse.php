@@ -21,11 +21,11 @@ class LoginResponse implements LoginResponseContract
             return redirect()->route('login');
         }
 
-        // Check if user is admin, redirect to admin dashboard
+        // Check if user is admin, redirect to home page
         if ($user->is_admin) {
             return $request->wantsJson()
                 ? new JsonResponse([], 200)
-                : redirect()->intended(route('admin.dashboard'));
+                : redirect()->intended(route('home'));
         }
 
         // Check if user is a seller (farmer), redirect to seller dashboard

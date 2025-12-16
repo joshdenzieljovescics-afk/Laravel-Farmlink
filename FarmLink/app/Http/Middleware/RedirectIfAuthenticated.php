@@ -23,9 +23,9 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
                 $user = Auth::user();
 
-                // If user is admin, redirect to admin dashboard
+                // If user is admin, redirect to home page
                 if ($user->is_admin) {
-                    return redirect()->route('admin.dashboard');
+                    return redirect()->route('home');
                 }
 
                 // If user is a seller (farmer), redirect to seller dashboard

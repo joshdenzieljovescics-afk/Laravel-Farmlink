@@ -99,4 +99,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Product::class, 'accID');
     }
+
+    /**
+     * Get the transactions for the user
+     */
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * Get the orders for the user
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

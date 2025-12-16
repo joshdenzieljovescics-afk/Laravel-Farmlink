@@ -309,8 +309,8 @@
                         <li><a href="{{ route('home') }}" class="text-green-100 hover:text-white transition-colors">Home</a></li>
                         <li><a href="{{ route('products') }}" class="text-green-100 hover:text-white transition-colors">Products</a></li>
                         <li><a href="{{ route('about') }}" class="text-green-100 hover:text-white transition-colors">About Us</a></li>
-                        <li><a href="{{ route('contact') }}" class="text-green-100 hover:text-white transition-colors">Contact</a></li>
-                        <li><a href="{{ route('developers') }}" class="text-green-100 hover:text-white transition-colors">Developers</a></li>
+                        <li><span class="text-green-100 cursor-default">Contact</span></li>
+                        <li><span class="text-green-100 cursor-default">Developers</span></li>
                     </ul>
                 </div>
 

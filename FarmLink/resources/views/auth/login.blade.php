@@ -6,55 +6,40 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login - FarmLink</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'farm-green': '#2d5016',
-                        'farm-cream': '#f5f5dc',
-                    }
-                }
-            }
+    <style>
+        .farmlink-bg {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
         }
-    </script>
+    </style>
 </head>
-<body class="bg-gradient-to-br from-green-50 via-white to-blue-50 min-h-screen">
-    <div class="min-h-screen flex items-center justify-center px-4">
-        <div class="w-full max-w-md">
-            <div class="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
-                <!-- Logo and Header -->
-                <div class="text-center mb-8">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-600 to-green-700 rounded-2xl mb-4 shadow-lg">
-                        <span class="text-3xl">🌱</span>
-                    </div>
-                    <h2 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent mb-2">Welcome Back!</h2>
-                    <p class="text-gray-600">Sign in to your FarmLink account</p>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex">
+        <!-- Left Side - Login Form -->
+        <div class="flex-1 flex items-center justify-center p-8 overflow-y-auto">
+            <div class="w-full max-w-md">
+                <!-- Mobile Logo -->
+                <div class="lg:hidden text-center mb-8">
+                    <span class="text-5xl">🌾</span>
+                    <h1 class="text-3xl font-bold text-green-700 mt-2">FarmLink</h1>
                 </div>
 
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back!</h2>
+                    <p class="text-gray-600 mb-6">Sign in to your FarmLink account</p>
+
                 @if (session('status'))
-                    <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            {{ session('status') }}
-                        </div>
+                    <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg">
+                        {{ session('status') }}
                     </div>
                 @endif
 
                 @if ($errors->any())
-                    <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg">
-                        <div class="flex items-start">
-                            <svg class="w-5 h-5 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                            </svg>
-                            <ul class="list-disc list-inside">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                    <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+                        <ul class="list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
                 @endif
 
@@ -125,13 +110,8 @@
 
                     <!-- Login Button -->
                     <button type="submit" 
-                            class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02]">
-                        <span class="flex items-center justify-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                            </svg>
-                            Sign In
-                        </span>
+                            class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                        Sign In
                     </button>
                 </form>
 
@@ -149,9 +129,6 @@
                 <div class="text-center">
                     <a href="{{ route('register') }}" class="inline-flex items-center justify-center w-full px-6 py-3 border-2 border-green-600 text-green-600 font-semibold rounded-lg hover:bg-green-50 transition-all duration-200">
                         Create an account
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
                     </a>
                 </div>
 
@@ -167,6 +144,59 @@
             </div>
         </div>
     </div>
+
+    <!-- Right Side - Branding -->
+    <div class="hidden lg:flex lg:w-1/2 farmlink-bg items-center justify-center p-12">
+        <div class="max-w-md text-white">
+            <div class="flex items-center mb-8">
+                <span class="text-6xl mr-4">🌾</span>
+                <h1 class="text-5xl font-bold">FarmLink</h1>
+            </div>
+            <p class="text-xl mb-8">Connecting farms to your table!</p>
+            
+            <div class="bg-white/10 backdrop-blur rounded-xl p-6 mb-6">
+                <h3 class="text-2xl font-bold mb-4">✨ Why Choose FarmLink?</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <span class="mr-2">🌱</span>
+                        <span>Fresh produce directly from local farms</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2">💚</span>
+                        <span>Support sustainable agriculture</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2">🛒</span>
+                        <span>Easy ordering with FarmTokens</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2">🚚</span>
+                        <span>Convenient delivery options</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur rounded-xl p-6">
+                <h3 class="text-2xl font-bold mb-4">🌟 Join Our Community</h3>
+                <p class="mb-4">Whether you're a farmer looking to sell or a buyer seeking fresh produce, FarmLink brings you together.</p>
+                <div class="flex items-center space-x-4">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold">500+</div>
+                        <div class="text-sm text-green-100">Products</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold">200+</div>
+                        <div class="text-sm text-green-100">Farmers</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold">1000+</div>
+                        <div class="text-sm text-green-100">Happy Buyers</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script>
         function togglePassword() {

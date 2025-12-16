@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -52,15 +54,41 @@ class OrderController extends Controller
             'admin_notes' => 'required|string|max:1000',
         ]);
 
-        $order = Order::findOrFail($id);
-        
-        $order->update([
-            'status' => 'rejected',
-            'admin_notes' => $request->admin_notes,
-            'approved_by' => auth()->id(),
-            'approved_at' => now(),
-        ]);
+        try {
+            DB::beginTransaction();
 
-        return redirect()->back()->with('success', 'Order rejected.');
+            $order = Order::with('user')->findOrFail($id);
+            
+            // Refund the money to the buyer
+            $buyer = $order->user;
+            $refundAmount = $order->total;
+            
+            // Add the refund to buyer's farm_tokens
+            $buyer->farm_tokens = $buyer->farm_tokens + $refundAmount;
+            $buyer->save();
+            
+            // Create a refund transaction record
+            Transaction::create([
+                'user_id' => $buyer->id,
+                'type' => 'refund',
+                'amount' => $refundAmount,
+                'description' => "Refund for rejected order #{$order->order_number}",
+            ]);
+            
+            // Update order status
+            $order->update([
+                'status' => 'rejected',
+                'admin_notes' => $request->admin_notes,
+                'approved_by' => auth()->id(),
+                'approved_at' => now(),
+            ]);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Order rejected and ' . number_format($refundAmount, 2) . ' FarmTokens refunded to buyer.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Failed to reject order: ' . $e->getMessage());
+        }
     }
 }
